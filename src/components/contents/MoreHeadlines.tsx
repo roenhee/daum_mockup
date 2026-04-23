@@ -1,6 +1,6 @@
 import type { Headline } from '@/mocks/contentsNews';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { TextHeadlineList } from '@/components/ui/TextHeadlineList';
+import { TextList, TextListItem } from '@/components/ui/patterns';
 
 interface MoreHeadlinesProps {
   title: string;
@@ -12,7 +12,13 @@ export function MoreHeadlines({ title, headlines, timestamp }: MoreHeadlinesProp
   return (
     <section className="bg-white">
       <SectionHeader title={title} right={timestamp} />
-      <TextHeadlineList items={headlines} />
+      <TextList>
+        {headlines.map((it) => (
+          <TextListItem key={it.id} to={`/news/${it.id}`} className="font-medium">
+            {it.title}
+          </TextListItem>
+        ))}
+      </TextList>
     </section>
   );
 }

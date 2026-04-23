@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
+import { clsx } from 'clsx';
 import { placeholderImg } from '@/lib/img';
-import { cn } from '@/lib/cn';
 
 interface ArticleMetaProps {
   publisher: string;
@@ -23,7 +23,7 @@ export function ArticleMeta({
 }: ArticleMetaProps) {
   const textSize = size === 'md' ? 'text-caption' : 'text-meta';
   return (
-    <div className={cn('flex items-center gap-1.5', textSize, 'text-content-secondary', className)}>
+    <div className={clsx('flex items-center gap-1.5', textSize, 'text-content-secondary', className)}>
       {showLogo && publisherLogoSeed ? (
         <img
           src={placeholderImg(`pub-${publisherLogoSeed}`, 40, 40, 'logo,media')}

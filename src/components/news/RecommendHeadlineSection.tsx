@@ -1,6 +1,6 @@
 import type { RecommendHeadline } from '@/mocks/newsDetail';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { TextHeadlineList } from '@/components/ui/TextHeadlineList';
+import { TextList, TextListItem } from '@/components/ui/patterns';
 
 interface RecommendHeadlineSectionProps {
   headlines: RecommendHeadline[];
@@ -14,7 +14,13 @@ export function RecommendHeadlineSection({
   return (
     <section className="bg-white">
       <SectionHeader title="이 시각 추천뉴스" right={timestamp} />
-      <TextHeadlineList items={headlines} />
+      <TextList>
+        {headlines.map((it) => (
+          <TextListItem key={it.id} to={`/news/${it.id}`} className="font-medium">
+            {it.title}
+          </TextListItem>
+        ))}
+      </TextList>
     </section>
   );
 }

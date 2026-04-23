@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RefreshCw, SlidersHorizontal } from 'lucide-react';
 import type { Headline } from '@/mocks/contentsNews';
-import { TextHeadlineList } from '@/components/ui/TextHeadlineList';
+import { TextList, TextListItem } from '@/components/ui/patterns';
 
 interface MajorHeadlinesProps {
   headlines: Headline[];
@@ -13,7 +13,13 @@ export function MajorHeadlines({ headlines, totalPages = 8 }: MajorHeadlinesProp
 
   return (
     <section className="bg-white">
-      <TextHeadlineList items={headlines} />
+      <TextList>
+        {headlines.map((it) => (
+          <TextListItem key={it.id} to={`/news/${it.id}`} className="font-medium">
+            {it.title}
+          </TextListItem>
+        ))}
+      </TextList>
       <div className="flex items-center justify-between gap-2 px-4 py-3">
         <button
           type="button"

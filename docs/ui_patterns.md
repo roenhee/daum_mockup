@@ -184,3 +184,78 @@ export function SlotName({ children, className, onClick }: SlotNameProps) {
 - 요청받은 슬롯이 기존 atom (`Thumbnail`, `ArticleMeta` 등) 과 역할이 겹칠 때
 - 이름을 외형 기반으로 짓기 어렵고 도메인성이 강해 보일 때
 - `docs/02_daum_service_spec.md` 와 현재 구현이 어긋날 때 (스펙 우선 — CLAUDE.md §13)
+
+---
+
+## 10. 현재 등록된 슬롯 (registry)
+
+슬롯이 추가·수정될 때마다 이 섹션을 업데이트한다. 소비 위치 목록과 변형 선택 기준을 같이 적어 두면 다음 세션에서도 규약이 유지된다.
+
+### 10.1 `TextList` / `TextListItem`
+**파일**: `src/components/ui/patterns/TextList.tsx`
+
+**용도**: 구분선으로 나뉜 한 줄 텍스트 세로 리스트. 탭을 가로질러 재사용되는 범용 슬롯.
+
+**레이아웃 보장**:
+- 컨테이너: `<ul>` + `divide-y divide-gray-100 px-4`
+- 각 아이템: `<li>` + 내부 링크/텍스트 `block py-[11px] text-[14px] leading-snug text-gray-900 truncate`
+- `TextListItem`의 `to` 있으면 `<Link>`, 없으면 `<span>` (비클릭)
+
+**호출자 조립 규칙**:
+- 굵은 제목(뉴스 헤드라인 류)에는 `className="font-medium"` 주입
+- 일반 텍스트(스포츠/연예/머니 속보 리스트 류)에는 className 생략
+
+**사용처**:
+- `components/contents/MajorHeadlines.tsx` — 뉴스 서브탭 주요 뉴스 (bold, clickable)
+- `components/contents/MoreHeadlines.tsx` — 뉴스 서브탭 많이 본 뉴스 (bold, clickable)
+- `components/news/RecommendHeadlineSection.tsx` — 뉴스 상세 이 시각 추천뉴스 (bold, clickable)
+- `components/contents/TextArticleList.tsx` — 스포츠/연예/머니 서브탭의 텍스트 리스트 4곳 (regular, non-clickable)
+
+### 10.2 `ThumbRow`
+**파일**: `src/components/ui/patterns/ThumbRow.tsx`
+
+**용도**: 썸네일 + 텍스트 컬럼(제목) 가로 배치 + 옵셔널 footer 행. 뉴스·연예·스포츠·머니 등 콘텐츠 피드의 기본 row.
+
+**레이아웃 보장**:
+- 외곽: `<Link>` + `block px-4 py-3 border-b border-gray-100`
+- 상단 row: `flex gap-4` — 텍스트 컬럼(`flex-1 min-w-0`) + 썸네일(`shrink-0 w-[72px] h-[72px] rounded-md overflow-hidden`)
+- 하단 row (옵셔널): `footer` 슬롯이 전체 너비로 `mt-2`에 렌더
+
+**타이틀 관례 (호출자 책임)**:
+- `text-[14px] leading-snug font-semibold line-clamp-2 text-gray-900`
+
+**변형 선택 기준** ⚠️:
+
+두 가지 변형이 있으며, **새 위치 추가 시 반드시 하나를 선택**해야 한다.
+
+#### 변형 A — 홈 스타일 (footer prop)
+```tsx
+<ThumbRow to="..." thumbnail={...} footer={<메타 행 (전체 너비)>}>
+  <h3>제목</h3>
+</ThumbRow>
+```
+매체명·시간·더보기 등 메타가 **썸네일 아래 전체 너비 row**로 따로 감.
+
+**쓰는 기준**: 홈탭처럼 피드가 주인공이고 공간감·가독성이 우선일 때.
+
+#### 변형 B — 콘텐츠탭 스타일 (children 내부)
+```tsx
+<ThumbRow to="..." thumbnail={...}>
+  <div className="h-full flex flex-col justify-between">
+    <h3>제목</h3>
+    <ArticleMeta ... />
+  </div>
+</ThumbRow>
+```
+메타가 **텍스트 컬럼 내부에 pin**되어 **이미지 하단 edge와 정렬**됨. 카드가 더 compact.
+
+**쓰는 기준**: 서브탭/리스트 맥락에서 여러 섹션이 겹쳐 있어 정보 밀도가 중요할 때.
+
+**사용처**:
+- `components/home/NewsFeed.tsx` — 홈탭 피드 4곳 (변형 A, 채널 뱃지·MoreIcon 포함)
+- `components/contents/HeadlineList.tsx` — 콘텐츠탭 연예/스포츠/머니 서브탭 10곳 (변형 B)
+
+### 10.3 신규 슬롯 등록 시 체크리스트
+- [ ] 이 섹션에 용도·레이아웃 보장·호출자 관례·사용처 추가
+- [ ] 변형이 2개 이상이면 선택 기준 명시
+- [ ] 기존 슬롯과 역할이 겹치지 않는지 확인

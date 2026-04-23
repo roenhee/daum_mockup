@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PhoneFrame } from '@/components/layout/PhoneFrame';
 import { HomePage } from '@/pages/HomePage';
 import { ContentsPage } from '@/pages/ContentsPage';
@@ -11,7 +11,7 @@ import { SearchPage } from '@/pages/SearchPage';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <PhoneFrame>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -25,6 +25,6 @@ export default function App() {
           <Route path="/search" element={<SearchPage />} />
         </Routes>
       </PhoneFrame>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

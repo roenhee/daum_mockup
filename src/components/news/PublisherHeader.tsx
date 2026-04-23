@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface PublisherHeaderProps {
   logoUrl: string;
@@ -32,10 +33,10 @@ export function PublisherHeader({ logoUrl, name, subscribed = false }: Publisher
           {isSubscribed ? '구독중' : '+ 구독'}
         </button>
         <button aria-label="검색" className="p-1.5 text-gray-700">
-          <img src="/icons/detail/search-more.svg" alt="" width={18} height={18} />
+          <img src={asset('/icons/detail/search-more.svg')} alt="" width={18} height={18} />
         </button>
         <button aria-label="공유" className="p-1.5 text-gray-700">
-          <img src="/icons/detail/share.svg" alt="" width={18} height={18} />
+          <img src={asset('/icons/detail/share.svg')} alt="" width={18} height={18} />
         </button>
       </div>
     </div>

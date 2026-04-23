@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface IconProps {
   src: string;
@@ -10,7 +11,7 @@ interface IconProps {
 export function Icon({ src, size = 24, alt = '', className }: IconProps) {
   return (
     <img
-      src={src}
+      src={asset(src)}
       alt={alt}
       width={size}
       height={size}

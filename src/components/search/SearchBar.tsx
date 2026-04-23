@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, X, Mic } from 'lucide-react';
+import { asset } from '@/lib/asset';
 
 interface SearchBarProps {
   value: string;
@@ -24,7 +25,7 @@ export function SearchBar({ value, onChange, onSubmit, autoFocus, showBack = tru
         </button>
       ) : null}
       <div className="flex-1 h-10 flex items-center gap-2 bg-white border border-gray-300 rounded-full px-4">
-        <img src="/icons/daum-d.svg" alt="Daum" width={20} height={20} className="shrink-0" />
+        <img src={asset('/icons/daum-d.svg')} alt="Daum" width={20} height={20} className="shrink-0" />
         <input
           autoFocus={autoFocus}
           value={value}

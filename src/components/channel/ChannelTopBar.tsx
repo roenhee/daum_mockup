@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, MoreHorizontal } from 'lucide-react';
+import { asset } from '@/lib/asset';
 import type { ChannelProfile } from '@/mocks/channelView';
 
 interface ChannelTopBarProps {
@@ -28,7 +29,7 @@ export function ChannelTopBar({ channel }: ChannelTopBarProps) {
         </span>
       </div>
       <button aria-label="공유" className="p-2 text-gray-700">
-        <img src="/icons/detail/share.svg" alt="" width={18} height={18} />
+        <img src={asset('/icons/detail/share.svg')} alt="" width={18} height={18} />
       </button>
       <button aria-label="더보기" className="p-2 text-gray-700 mr-1">
         <MoreHorizontal size={20} />

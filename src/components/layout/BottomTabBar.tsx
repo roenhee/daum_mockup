@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { Bot, type LucideIcon } from 'lucide-react';
+import { asset } from '@/lib/asset';
 import { cn } from '@/lib/cn';
 
 interface TabDef {
@@ -69,7 +70,7 @@ export function BottomTabBar() {
                 />
               ) : (
                 <img
-                  src={isActive ? iconSelected : icon}
+                  src={asset(isActive ? iconSelected! : icon!)}
                   alt=""
                   width={24}
                   height={24}

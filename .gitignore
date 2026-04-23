@@ -5,3 +5,9 @@ dist-ssr
 .DS_Store
 .vite
 .claude/
+
+# TypeScript build artifacts
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
+

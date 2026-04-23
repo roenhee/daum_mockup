@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { asset } from '@/lib/asset';
 
 interface InAppBrowserBarProps {
   onHome?: () => void;
@@ -20,7 +21,7 @@ export function InAppBrowserBar({
   return (
     <nav className="shrink-0 h-12 border-t border-gray-200 bg-white flex items-center">
       <IconBtn aria-label="홈" onClick={onHome}>
-        <img src="/icons/detail/home.svg" alt="" width={22} height={22} />
+        <img src={asset('/icons/detail/home.svg')} alt="" width={22} height={22} />
       </IconBtn>
       <IconBtn aria-label="이전" onClick={onBack}>
         <ChevronLeft size={22} />
@@ -29,10 +30,10 @@ export function InAppBrowserBar({
         <ChevronRight size={22} />
       </IconBtn>
       <IconBtn aria-label="검색" onClick={onSearch}>
-        <img src="/icons/detail/search-more.svg" alt="" width={18} height={18} />
+        <img src={asset('/icons/detail/search-more.svg')} alt="" width={18} height={18} />
       </IconBtn>
       <IconBtn aria-label="공유" onClick={onShare}>
-        <img src="/icons/detail/share.svg" alt="" width={18} height={18} />
+        <img src={asset('/icons/detail/share.svg')} alt="" width={18} height={18} />
       </IconBtn>
       <IconBtn aria-label="더보기" onClick={onMore}>
         <MoreHorizontal size={22} />

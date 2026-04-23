@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface DaumLogoProps {
   className?: string;
@@ -8,7 +9,7 @@ interface DaumLogoProps {
 export function DaumLogo({ className, height = 22 }: DaumLogoProps) {
   return (
     <img
-      src="/daum-logo.svg"
+      src={asset('/daum-logo.svg')}
       alt="Daum"
       height={height}
       style={{ height }}

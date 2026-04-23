@@ -4,6 +4,7 @@ import { Search as SearchLucide, Mic } from 'lucide-react';
 import type { HeaderVariant } from '@/types';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface HeaderBarProps {
   variant: HeaderVariant;
@@ -156,7 +157,7 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
               className="flex items-center gap-2 h-12 rounded-full bg-white px-3 text-[14px]"
             >
               <img
-                src="/icons/daum-d.svg"
+                src={asset('/icons/daum-d.svg')}
                 alt="Daum"
                 width={28}
                 height={28}

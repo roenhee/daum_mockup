@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import type { NewsArticle, Publisher } from '@/types';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { asset } from '@/lib/asset';
 
 interface SubscribedPublishersProps {
   publishers: Publisher[];
@@ -48,7 +49,7 @@ export function SubscribedPublishers({ publishers, featured }: SubscribedPublish
         className="block relative mx-4 mb-4 rounded-xl overflow-hidden aspect-square"
       >
         <img
-          src={featured.thumbnailUrl}
+          src={asset(featured.thumbnailUrl)}
           alt=""
           className="w-full h-full object-cover bg-gray-100"
           loading="lazy"

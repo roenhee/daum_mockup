@@ -1,20 +1,21 @@
 import type { LiveContent } from '@/types';
 
+// Topic aligned with 2026-04-27 real Daum headlines.
 export const LIVE_CONTENTS: LiveContent[] = [
   {
     id: 'live-001',
-    title: '장동혁, 귀국하자마자 친한계 겨냥…"탈당 권유" 강경 발언',
-    channelName: '한겨레',
-    thumbnailUrl: 'https://picsum.photos/seed/live-001/640/360',
-    viewerCount: 3500,
+    title: '하정우, 부산 북갑 출마설…청와대 사의 표명 현장 LIVE',
+    channelName: '뉴스1',
+    thumbnailUrl: '/mock-images/news/20260427121700424.jpg',
+    viewerCount: 4120,
     category: '시사',
   },
   {
     id: 'live-002',
-    title: '[LIVE] 오늘의 증시 브리핑 - 코스피 3400 돌파 분석',
-    channelName: 'SBS Biz',
-    thumbnailUrl: 'https://picsum.photos/seed/live-002/640/360',
-    viewerCount: 1820,
-    category: '경제',
+    title: '[LIVE] QWER 세리머니 미디어 쇼케이스',
+    channelName: 'MBC연예',
+    thumbnailUrl: '/mock-images/news/20260427115841592.jpg',
+    viewerCount: 2860,
+    category: 'K팝',
   },
 ];

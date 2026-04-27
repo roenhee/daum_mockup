@@ -1,6 +1,7 @@
 import type { LiveContent } from '@/types';
 import { LiveBadge } from '@/components/ui/LiveBadge';
 import { SectionHeader, SectionMoreButton } from '@/components/ui/SectionHeader';
+import { asset } from '@/lib/asset';
 
 interface PublisherLiveSectionProps {
   publisherName: string;
@@ -14,7 +15,7 @@ export function PublisherLiveSection({ publisherName, item }: PublisherLiveSecti
       <div className="px-4 pb-3">
         <div className="relative rounded-lg overflow-hidden">
           <img
-            src={item.thumbnailUrl}
+            src={asset(item.thumbnailUrl)}
             alt=""
             className="w-full aspect-video object-cover bg-gray-100"
             loading="lazy"

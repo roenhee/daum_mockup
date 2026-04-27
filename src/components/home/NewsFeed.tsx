@@ -4,6 +4,7 @@ import type { NewsArticle } from '@/types';
 import type { AdSlot } from '@/mocks/ads';
 import { ThumbRow } from '@/components/ui/patterns';
 import { AdBanner } from '@/components/ui/AdBanner';
+import { asset } from '@/lib/asset';
 
 interface NewsFeedProps {
   articles: NewsArticle[];
@@ -24,7 +25,7 @@ export function NewsFeed({ articles, ads = [], adEvery = 4 }: NewsFeedProps) {
         to={isChannel ? `/channel/${a.id}` : `/news/${a.id}`}
         thumbnail={
           <img
-            src={a.thumbnailUrl}
+            src={asset(a.thumbnailUrl)}
             alt=""
             className="w-full h-full object-cover"
             loading="lazy"

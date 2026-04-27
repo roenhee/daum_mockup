@@ -3,6 +3,7 @@ import type { ShortItem } from '@/mocks/shorts';
 import { SectionHeader, SectionMoreButton } from '@/components/ui/SectionHeader';
 import { useDragScroll } from '@/lib/useDragScroll';
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface ShortsSectionProps {
   items: ShortItem[];
@@ -33,7 +34,7 @@ export function ShortsSection({
             <li key={s.id} className="w-[128px] shrink-0">
               <div className="relative rounded-xl overflow-hidden aspect-[9/16] bg-gray-900">
                 <img
-                  src={s.thumbnailUrl}
+                  src={asset(s.thumbnailUrl)}
                   alt=""
                   className="w-full h-full object-cover"
                   draggable={false}

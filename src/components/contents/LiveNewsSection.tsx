@@ -4,6 +4,7 @@ import { LiveBadge } from '@/components/ui/LiveBadge';
 import { SectionHeader, SectionMoreButton } from '@/components/ui/SectionHeader';
 import { useDragScroll } from '@/lib/useDragScroll';
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface LiveNewsSectionProps {
   items: NewsArticle[];
@@ -29,7 +30,7 @@ export function LiveNewsSection({ items }: LiveNewsSectionProps) {
               <Link to={`/news/${a.id}`} className="block">
                 <div className="relative rounded-lg overflow-hidden aspect-video bg-gray-900">
                   <img
-                    src={a.thumbnailUrl}
+                    src={asset(a.thumbnailUrl)}
                     alt=""
                     className="w-full h-full object-cover"
                     draggable={false}

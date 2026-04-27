@@ -3,6 +3,7 @@ import type { NewsArticle } from '@/types';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { useDragScroll } from '@/lib/useDragScroll';
 import { cn } from '@/lib/cn';
+import { asset } from '@/lib/asset';
 
 interface PhotoNewsCarouselProps {
   items: NewsArticle[];
@@ -28,7 +29,7 @@ export function PhotoNewsCarousel({ items }: PhotoNewsCarouselProps) {
               <Link to={`/news/${a.id}`} className="block">
                 <div className="relative rounded-lg overflow-hidden aspect-square bg-gray-100">
                   <img
-                    src={a.thumbnailUrl}
+                    src={asset(a.thumbnailUrl)}
                     alt=""
                     className="w-full h-full object-cover"
                     draggable={false}

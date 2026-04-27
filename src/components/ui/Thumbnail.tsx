@@ -1,4 +1,5 @@
 import { placeholderImg } from '@/lib/img';
+import { asset } from '@/lib/asset';
 import { cn } from '@/lib/cn';
 
 interface ThumbnailProps {
@@ -26,7 +27,7 @@ export function Thumbnail({
 }: ThumbnailProps) {
   return (
     <img
-      src={url ?? placeholderImg(seed, width, height, topic)}
+      src={url ? asset(url) : placeholderImg(seed, width, height, topic)}
       alt={alt}
       className={cn('object-cover bg-surface-gap', className)}
       loading="lazy"

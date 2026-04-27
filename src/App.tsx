@@ -4,7 +4,8 @@ import { HomePage } from '@/pages/HomePage';
 import { ContentsPage } from '@/pages/ContentsPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { ShoppingPage } from '@/pages/ShoppingPage';
-import { LoopPage } from '@/pages/LoopPage';
+import { MaiPage } from '@/pages/MaiPage';
+import { MaiSubPage } from '@/pages/MaiSubPage';
 import { NewsDetailPage } from '@/pages/NewsDetailPage';
 import { ChannelViewPage } from '@/pages/ChannelViewPage';
 import { SearchPage } from '@/pages/SearchPage';
@@ -19,7 +20,9 @@ export default function App() {
           <Route path="/contents/:subtab" element={<ContentsPage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/shopping" element={<ShoppingPage />} />
-          <Route path="/loop" element={<LoopPage />} />
+          <Route path="/mai" element={<Navigate to="/mai/news" replace />} />
+          <Route path="/mai/:subtab" element={<MaiPage />} />
+          <Route path="/mai-sub/:id" element={<MaiSubPage />} />
           <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/channel/:id" element={<ChannelViewPage />} />
           <Route path="/search" element={<SearchPage />} />

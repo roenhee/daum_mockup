@@ -37,7 +37,7 @@ const TABS: TabDef[] = [
     iconSelected: '/icons/tab/shopping_selected.svg',
   },
   {
-    to: '/loop',
+    to: '/mai',
     label: 'M:AI',
     icon: '/icons/tab/mai.svg',
     iconSelected: '/icons/tab/mai_selected.svg',

@@ -1,6 +1,6 @@
-export type BottomTabId = 'home' | 'contents' | 'community' | 'shopping' | 'loop';
+export type BottomTabId = 'home' | 'contents' | 'community' | 'shopping' | 'mai';
 
-export type HeaderVariant = 'home' | 'contents' | 'community' | 'shopping' | 'loop';
+export type HeaderVariant = 'home' | 'contents' | 'community' | 'shopping' | 'mai' | 'loop';
 
 export type TrendStatus = 'new' | 'up' | 'down' | 'same';
 

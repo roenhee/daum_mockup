@@ -11,6 +11,7 @@ interface AppShellProps {
   onOpenMenu?: () => void;
   bodyClassName?: string;
   scrollableHeader?: boolean;
+  bottomOverlay?: ReactNode;
 }
 
 export function AppShell({
@@ -19,6 +20,7 @@ export function AppShell({
   onOpenMenu,
   bodyClassName,
   scrollableHeader,
+  bottomOverlay,
 }: AppShellProps) {
   const dark = variant === 'loop';
   const mainRef = useRef<HTMLElement>(null);
@@ -45,6 +47,7 @@ export function AppShell({
         </main>
         <ScrollIndicator targetRef={mainRef} />
       </div>
+      {bottomOverlay}
       <BottomTabBar />
     </div>
   );

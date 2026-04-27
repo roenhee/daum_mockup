@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search as SearchLucide, Mic } from 'lucide-react';
+import { Search as SearchLucide, Mic, Settings } from 'lucide-react';
 import type { HeaderVariant } from '@/types';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/cn';
@@ -20,11 +20,11 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
     return (
       <HeaderShell noBorder>
         <span className="text-[17px] font-bold">콘텐츠</span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center -mr-1.5">
           <IconBtn aria-label="설정">
             <Icon src="/icons/nav/tab-setting.svg" size={24} />
           </IconBtn>
-          <Link to="/search" aria-label="검색" className="p-2">
+          <Link to="/search" aria-label="검색" className="p-1.5">
             <Icon src="/icons/nav/search.svg" size={24} />
           </Link>
         </div>
@@ -36,11 +36,11 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
     return (
       <HeaderShell>
         <span className="text-[17px] font-bold">커뮤니티</span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center -mr-1.5">
           <IconBtn aria-label="알림">
             <Icon src="/icons/nav/notification.svg" size={24} />
           </IconBtn>
-          <Link to="/search" aria-label="검색" className="p-2">
+          <Link to="/search" aria-label="검색" className="p-1.5">
             <Icon src="/icons/nav/search.svg" size={24} />
           </Link>
         </div>
@@ -52,13 +52,32 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
     return (
       <HeaderShell>
         <span className="text-[17px] font-bold">쇼핑</span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center -mr-1.5">
           <IconBtn aria-label="마이 쇼핑">
             <Icon src="/icons/nav/shopping-my.svg" size={24} />
           </IconBtn>
-          <Link to="/search" aria-label="쇼핑 검색" className="p-2">
+          <Link to="/search" aria-label="쇼핑 검색" className="p-1.5">
             <Icon src="/icons/nav/shopping-search.svg" size={24} />
           </Link>
+        </div>
+      </HeaderShell>
+    );
+  }
+
+  if (variant === 'mai') {
+    return (
+      <HeaderShell noBorder>
+        <span className="text-[17px] font-bold">MAI</span>
+        <div className="flex items-center -mr-1.5">
+          <Link to="/mai-sub/notification" aria-label="알림" className="p-1.5 text-gray-900">
+            <Icon src="/icons/nav/notification.svg" size={24} />
+          </Link>
+          <Link to="/mai-sub/settings" aria-label="설정" className="p-1.5 text-gray-900">
+            <Settings size={24} strokeWidth={1.8} />
+          </Link>
+          <IconBtn aria-label="검색" type="button">
+            <Icon src="/icons/nav/search.svg" size={24} />
+          </IconBtn>
         </div>
       </HeaderShell>
     );
@@ -70,8 +89,8 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
         <span className="font-semibold">추천</span>
         <span className="text-white/60">인기</span>
       </div>
-      <div className="flex items-center gap-1">
-        <Link to="/search" aria-label="검색" className="p-2 text-white">
+      <div className="flex items-center -mr-1.5">
+        <Link to="/search" aria-label="검색" className="p-1.5 text-white">
           <SearchLucide size={22} />
         </Link>
       </div>
@@ -104,7 +123,7 @@ function IconBtn({
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button {...rest} className={cn('p-2 text-gray-900', className)}>
+    <button {...rest} className={cn('p-1.5 text-gray-900', className)}>
       {children}
     </button>
   );
@@ -128,11 +147,11 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
         <button
           aria-label="메뉴 열기"
           onClick={onOpenMenu}
-          className="p-2 -ml-2 text-gray-900"
+          className="p-1.5 -ml-1.5 text-gray-900"
         >
           <Icon src="/icons/nav/notification-sidemenu.svg" size={24} />
         </button>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center -mr-1.5">
           <IconBtn aria-label="AI 챗봇">
             <Icon src="/icons/nav/chat-bot.svg" size={24} />
           </IconBtn>

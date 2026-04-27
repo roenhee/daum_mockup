@@ -1,4 +1,4 @@
-import { BannerAd } from '@/components/ui/BannerAd';
+import { BizBoard } from '@/components/ui/BizBoard';
 import { AdBanner } from '@/components/ui/AdBanner';
 import { ShortsSection } from '@/components/home/ShortsSection';
 import { MajorHeadlines } from '@/components/contents/MajorHeadlines';
@@ -22,7 +22,7 @@ import { HOME_SHORTS } from '@/mocks/shorts';
 export function NewsSubtab() {
   return (
     <SubtabSections>
-      <BannerAd ad={HOME_ADS[0]} />
+      <BizBoard compact />
       <MajorHeadlines headlines={MAJOR_HEADLINES} />
       <CompactWeather weather={HOME_WEATHER} />
       <RecommendNewsList headlines={RECOMMEND_NEWS} timestamp="09:51 기준" />

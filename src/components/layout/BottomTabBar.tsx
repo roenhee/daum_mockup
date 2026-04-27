@@ -1,14 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Bot, type LucideIcon } from 'lucide-react';
 import { asset } from '@/lib/asset';
 import { cn } from '@/lib/cn';
 
 interface TabDef {
   to: string;
   label: string;
-  icon?: string;
-  iconSelected?: string;
-  lucideIcon?: LucideIcon;
+  icon: string;
+  iconSelected: string;
   end?: boolean;
 }
 
@@ -41,14 +39,15 @@ const TABS: TabDef[] = [
   {
     to: '/loop',
     label: 'M:AI',
-    lucideIcon: Bot,
+    icon: '/icons/tab/mai.svg',
+    iconSelected: '/icons/tab/mai_selected.svg',
   },
 ];
 
 export function BottomTabBar() {
   return (
     <nav className="shrink-0 h-14 border-t border-gray-200 bg-white flex items-stretch">
-      {TABS.map(({ to, label, icon, iconSelected, lucideIcon: LucideIcon, end }) => (
+      {TABS.map(({ to, label, icon, iconSelected, end }) => (
         <NavLink
           key={to}
           to={to}
@@ -62,22 +61,14 @@ export function BottomTabBar() {
         >
           {({ isActive }) => (
             <>
-              {LucideIcon ? (
-                <LucideIcon
-                  size={24}
-                  strokeWidth={isActive ? 2.2 : 1.8}
-                  className="text-black"
-                />
-              ) : (
-                <img
-                  src={asset(isActive ? iconSelected! : icon!)}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="w-6 h-6"
-                  draggable={false}
-                />
-              )}
+              <img
+                src={asset(isActive ? iconSelected : icon)}
+                alt=""
+                width={24}
+                height={24}
+                className="w-6 h-6"
+                draggable={false}
+              />
               <span>{label}</span>
             </>
           )}

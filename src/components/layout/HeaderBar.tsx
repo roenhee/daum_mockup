@@ -116,15 +116,15 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
   useEffect(() => {
     const main = document.querySelector('main');
     if (!main) return;
-    const onScroll = () => setCollapsed(main.scrollTop > 60);
+    const onScroll = () => setCollapsed(main.scrollTop > 24);
     onScroll();
     main.addEventListener('scroll', onScroll, { passive: true });
     return () => main.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <header className="shrink-0 bg-white">
-      <div className="h-12 flex items-center justify-between px-3">
+    <>
+      <div className="h-12 flex items-center justify-between px-3 bg-white">
         <button
           aria-label="메뉴 열기"
           onClick={onOpenMenu}
@@ -144,11 +144,11 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
           </IconBtn>
         </div>
       </div>
-      <div className="px-3 pt-2 pb-3 flex justify-center">
+      <div className="sticky top-0 z-20 bg-white px-3 pt-2 pb-3 flex justify-center">
         <div
           className={cn(
             'transition-[width] duration-300 ease-out',
-            collapsed ? 'w-1/2' : 'w-full',
+            collapsed ? 'w-3/5' : 'w-full',
           )}
         >
           <div className="rounded-full p-[2px] bg-gradient-to-r from-daum-blue via-daum-green via-60% via-daum-yellow to-daum-red">
@@ -170,7 +170,7 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }
 

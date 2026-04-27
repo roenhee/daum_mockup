@@ -32,7 +32,7 @@ export function HomePage() {
   const feedD = HOME_NEWS_FEED.slice(15);
 
   return (
-    <AppShell variant="home">
+    <AppShell variant="home" scrollableHeader>
       <div className="bg-gray-100 flex flex-col">
         <RealtimeTrend trends={REALTIME_TRENDS} />
         <WidgetCarousel weather={HOME_WEATHER} kospi={KOSPI_SUMMARY} />

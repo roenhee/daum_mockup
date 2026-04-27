@@ -144,11 +144,16 @@ function HomeHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
           </IconBtn>
         </div>
       </div>
-      <div className="sticky top-0 z-20 bg-white px-3 pt-2 pb-3 flex justify-center">
+      <div
+        className={cn(
+          'sticky top-0 z-20 px-3 pt-2 pb-3 flex justify-center transition-colors duration-200',
+          collapsed ? 'bg-transparent' : 'bg-white',
+        )}
+      >
         <div
           className={cn(
             'transition-[width] duration-300 ease-out',
-            collapsed ? 'w-3/5' : 'w-full',
+            collapsed ? 'w-1/2' : 'w-full',
           )}
         >
           <div className="rounded-full p-[2px] bg-gradient-to-r from-daum-blue via-daum-green via-60% via-daum-yellow to-daum-red">

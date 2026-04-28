@@ -64,6 +64,7 @@ export interface ArticleMultiData {
   thumbnailSeed?: string;
   thumbnailTopic?: string;
   thumbnailUrl?: string;
+  otherPublishers?: { name: string; logoSeed: string; headline: string; elapsed: string }[];
 }
 
 export interface EnvAnomalyData {
@@ -166,6 +167,16 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '호르무즈 통과 시도 선박들의 회항이 잇따르며 \'역봉쇄\' 우려가 커지고 있다. WTI는 4월 26일 96.23달러로 +1.94% 상승, 브렌트유도 92달러대로 진입했다.',
       thumbnailSeed: 'oil-price-96',
       thumbnailTopic: 'oil,price,gas,station',
+      otherPublishers: [
+        { name: '연합뉴스', logoSeed: 'yna', headline: '"호르무즈 회항 속출"…\'역봉쇄\' 우려에 WTI 96달러 돌파', elapsed: '42분 전' },
+        { name: '한국경제', logoSeed: 'hk', headline: '\'역봉쇄\' 현실화…유가·환율 동반 충격, 정유주 일제 급등', elapsed: '51분 전' },
+        { name: '조선일보', logoSeed: 'chosun', headline: '하루 15척 제한에 회항 잇따라…\'역봉쇄\' 시나리오 부상', elapsed: '1시간 전' },
+        { name: '중앙일보', logoSeed: 'joongang', headline: '호르무즈 통항 제한…정유 4사 "재고 충분, 상황 예의주시"', elapsed: '1시간 전' },
+        { name: '동아일보', logoSeed: 'donga', headline: '"이란發 \'역봉쇄\' 본격화"…브렌트유 92달러대 진입', elapsed: '1시간 전' },
+        { name: 'JTBC', logoSeed: 'jtbc', headline: '국제유가 96달러…호르무즈 회항 사태 격화', elapsed: '2시간 전' },
+        { name: '경향신문', logoSeed: 'khan', headline: '"\'역봉쇄\' 우려 현실로"…한국 수입 원유 70% 호르무즈 통과', elapsed: '2시간 전' },
+        { name: 'SBS', logoSeed: 'sbs', headline: '하루 15척 제한 첫날 회항 잇따라…유가 96달러 돌파', elapsed: '3시간 전' },
+      ],
     },
   },
 

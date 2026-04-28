@@ -9,6 +9,7 @@ export function PhoneFrame({ children }: PhoneFrameProps) {
   return (
     <div className="min-h-screen w-full bg-gray-100 desktop:flex desktop:items-center desktop:justify-center desktop:p-8">
       <div
+        id="phone-frame-root"
         className={cn(
           'relative w-full h-screen bg-white overflow-hidden',
           'desktop:w-[390px] desktop:h-[845px] desktop:rounded-[44px] desktop:border-[8px] desktop:border-black desktop:shadow-2xl',

@@ -129,41 +129,6 @@ function Thumbnail({ seed, topic, url, size = 80 }: { seed: string; topic: strin
   );
 }
 
-/* ─────────── Sparkline (공용) ─────────── */
-
-function Sparkline({
-  data,
-  width = 96,
-  height = 28,
-  color = '#2C2C2C',
-  filled = false,
-}: {
-  data: number[];
-  width?: number;
-  height?: number;
-  color?: string;
-  filled?: boolean;
-}) {
-  if (data.length === 0) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const stepX = width / Math.max(1, data.length - 1);
-  const pts = data.map((v, i) => {
-    const x = i * stepX;
-    const y = height - ((v - min) / range) * (height - 2) - 1;
-    return [x, y] as const;
-  });
-  const path = pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
-  const areaPath = `${path} L${width} ${height} L0 ${height} Z`;
-  return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="shrink-0">
-      {filled ? <path d={areaPath} fill={color} fillOpacity={0.12} /> : null}
-      <path d={path} fill="none" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 /* ─────────── DetailedAssetGraph (N-9b 전용) ─────────── */
 
 function DetailedAssetGraph({

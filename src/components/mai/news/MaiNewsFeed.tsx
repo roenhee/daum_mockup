@@ -18,10 +18,13 @@ import {
 } from './MaiNewsCards';
 
 const ARTICLE_KINDS = new Set(['n1a', 'n1b']);
+const FLAT_KINDS = new Set(['n11', 'n8a', 'n8b']);
+const NO_STATUS_KINDS = new Set(['n14']);
 
 type FeedItem = (typeof MAI_NEWS_FEED)[number];
 type Group =
   | { mode: 'stream'; items: FeedItem[] }
+  | { mode: 'flat'; item: FeedItem }
   | { mode: 'card'; item: FeedItem };
 
 function groupItems(items: FeedItem[]): Group[] {
@@ -34,6 +37,8 @@ function groupItems(items: FeedItem[]): Group[] {
         continue;
       }
       groups.push({ mode: 'stream', items: [item] });
+    } else if (FLAT_KINDS.has(item.kind)) {
+      groups.push({ mode: 'flat', item });
     } else {
       groups.push({ mode: 'card', item });
     }
@@ -84,16 +89,34 @@ export function MaiNewsFeed() {
             </Fragment>
           );
         }
+        if (g.mode === 'flat') {
+          const idx = itemIdx++;
+          return (
+            <Fragment key={gi}>
+              {showSeparator ? <SlotSeparator /> : null}
+              <div className="relative">
+                <SlotStatus
+                  read={isRead(idx)}
+                  onToggle={() => toggleRead(idx)}
+                />
+                {renderItem(g.item)}
+              </div>
+            </Fragment>
+          );
+        }
         const idx = itemIdx++;
+        const hideStatus = NO_STATUS_KINDS.has(g.item.kind);
         return (
           <Fragment key={gi}>
             {showSeparator ? <SlotSeparator /> : null}
             <div className="relative px-3 py-3">
-              <SlotStatus
-                read={isRead(idx)}
-                inset
-                onToggle={() => toggleRead(idx)}
-              />
+              {!hideStatus ? (
+                <SlotStatus
+                  read={isRead(idx)}
+                  inset
+                  onToggle={() => toggleRead(idx)}
+                />
+              ) : null}
               {renderItem(g.item)}
             </div>
           </Fragment>

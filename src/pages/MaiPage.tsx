@@ -4,22 +4,19 @@ import { AppShell } from '@/components/layout/AppShell';
 import { SubTabBar } from '@/components/ui/SubTabBar';
 import { MAI_GATEWAYS, MAI_PROFILE, MAI_SUBTABS } from '@/mocks/mai';
 import { MaiNewsFeed } from '@/components/mai/news/MaiNewsFeed';
-import { MaiMiniPlayer, MaiPlayerProvider } from '@/components/mai/news/MaiPlayer';
 
 export function MaiPage() {
   const { subtab = 'news' } = useParams<{ subtab?: string }>();
 
   return (
-    <MaiPlayerProvider>
-      <AppShell variant="mai" bottomOverlay={<MaiMiniPlayer />}>
-        <div className="flex flex-col bg-white">
-          <ProfileSection />
-          <GatewayRow />
-          <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
-          <SubtabBody id={subtab} />
-        </div>
-      </AppShell>
-    </MaiPlayerProvider>
+    <AppShell variant="mai">
+      <div className="flex flex-col bg-white">
+        <ProfileSection />
+        <GatewayRow />
+        <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
+        <SubtabBody id={subtab} />
+      </div>
+    </AppShell>
   );
 }
 

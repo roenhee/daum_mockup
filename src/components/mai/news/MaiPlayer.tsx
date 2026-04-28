@@ -48,11 +48,6 @@ const VARIANT_EMOJI: Record<NonNullable<PlayerTrack['variant']>, string> = {
   flash: '⚡',
 };
 
-const VARIANT_BG: Record<NonNullable<PlayerTrack['variant']>, string> = {
-  morning: '#FFEFC9',
-  evening: '#D9E1F1',
-  flash: '#E0E0E0',
-};
 
 export function MaiMiniPlayer() {
   const ctx = useContext(PlayerCtx);
@@ -75,39 +70,40 @@ export function MaiMiniPlayer() {
   const variant = track.variant ?? 'morning';
 
   return (
-    <div className="shrink-0 border-t border-gray-100 bg-white px-3 py-2 flex items-center gap-2.5">
-      <div
-        className="w-9 h-9 rounded-md flex items-center justify-center text-[18px] shrink-0"
-        style={{ backgroundColor: VARIANT_BG[variant] }}
-        aria-hidden
-      >
-        {VARIANT_EMOJI[variant]}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[12px] font-medium text-gray-900 truncate">{track.title}</p>
-        <div className="mt-1 flex items-center gap-1.5">
-          <div className="flex-1 h-[3px] bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-gray-900" style={{ width: `${progress}%` }} />
-          </div>
-          <span className="text-[10px] text-gray-400 tabular-nums shrink-0">{track.duration}</span>
+    <div className="shrink-0 px-3 pb-2">
+      <div className="rounded-2xl shadow-[0_6px_18px_rgba(0,0,0,0.18)] border border-[#050E2E] bg-[#0B1A4A] px-3 py-2 flex items-center gap-2.5">
+        <div
+          className="w-9 h-9 rounded-md bg-white flex items-center justify-center text-[18px] shrink-0"
+          aria-hidden
+        >
+          {VARIANT_EMOJI[variant]}
         </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[12px] font-medium text-white truncate">{track.title}</p>
+          <div className="mt-1 flex items-center gap-1.5">
+            <div className="flex-1 h-[3px] bg-white/30 rounded-full overflow-hidden">
+              <div className="h-full bg-[#A0CFEF]" style={{ width: `${progress}%` }} />
+            </div>
+            <span className="text-[10px] text-white/70 tabular-nums shrink-0">{track.duration}</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={playing ? '일시정지' : '재생'}
+          className="w-8 h-8 rounded-full bg-white text-[#0B1A4A] flex items-center justify-center shrink-0"
+        >
+          {playing ? <Pause size={13} fill="currentColor" /> : <Play size={12} fill="currentColor" className="ml-0.5" />}
+        </button>
+        <button
+          type="button"
+          onClick={stop}
+          aria-label="플레이어 닫기"
+          className="p-1 -mr-1 text-white/80 shrink-0"
+        >
+          <X size={16} />
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={toggle}
-        aria-label={playing ? '일시정지' : '재생'}
-        className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center shrink-0"
-      >
-        {playing ? <Pause size={13} fill="white" /> : <Play size={12} fill="white" className="ml-0.5" />}
-      </button>
-      <button
-        type="button"
-        onClick={stop}
-        aria-label="플레이어 닫기"
-        className="p-1 -mr-1 text-gray-500 shrink-0"
-      >
-        <X size={16} />
-      </button>
     </div>
   );
 }

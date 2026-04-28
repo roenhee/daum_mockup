@@ -3,6 +3,7 @@ import type { HeaderVariant } from '@/types';
 import { HeaderBar } from './HeaderBar';
 import { BottomTabBar } from './BottomTabBar';
 import { ScrollIndicator } from './ScrollIndicator';
+import { MaiMiniPlayer } from '@/components/mai/news/MaiPlayer';
 import { cn } from '@/lib/cn';
 
 interface AppShellProps {
@@ -48,6 +49,7 @@ export function AppShell({
         <ScrollIndicator targetRef={mainRef} />
       </div>
       {bottomOverlay}
+      <MaiMiniPlayer />
       <BottomTabBar />
     </div>
   );

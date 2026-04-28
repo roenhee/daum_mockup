@@ -40,3 +40,26 @@ export const MAI_SUBTABS: SubTab[] = [
   { id: 'issue', label: '이슈노트', to: '/mai/issue' },
   { id: 'explore', label: 'AI 탐구', to: '/mai/explore' },
 ];
+
+// 사용자가 등록한 키워드 (mock)
+export const MAI_REGISTERED_KEYWORDS: string[] = [
+  '이란 전쟁',
+  '주가',
+  '유가',
+  '반도체',
+  '상괭이',
+  '아쿠아리움',
+  '늑구',
+];
+
+// "+키워드" 추천 (mock)
+export const MAI_KEYWORD_SUGGESTIONS: string[] = [
+  'HBM',
+  '코스피',
+  '브렌트유',
+  '환율',
+  '오월드',
+  '호르무즈 해협',
+  '엔비디아',
+  '핵협상',
+];

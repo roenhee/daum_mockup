@@ -155,6 +155,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
       contextTag: '이 키워드 이번 주 보도량 평소 대비 ×4.6',
       thumbnailSeed: 'hormuz-strait',
       thumbnailTopic: 'oil,tanker,strait',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/17/sbsi/20260417203013669spic.jpg',
     },
   },
 
@@ -172,6 +174,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
       contextTag: '이 키워드 이번 주 보도량 평소 대비 ×3.2',
       thumbnailSeed: 'iran-hormuz-talks',
       thumbnailTopic: 'iran,negotiation,hormuz',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/27/sbsi/20260427170911593hwsh.jpg',
     },
   },
 
@@ -188,6 +192,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '코스피지수가 사상 최고치를 경신하며 마감했다. 외국인은 592억원, 기관은 6,815억원을 순매수하며 동반 매수세를 이어갔다. 반도체·이차전지·자동차주가 상승을 주도했다.',
       thumbnailSeed: 'kospi-record-high',
       thumbnailTopic: 'stock,market,korea,kospi',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/13/sbscnbc/20260413083303721pims.jpg',
     },
   },
 
@@ -205,6 +211,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
       contextTag: '유가 키워드 4월 보도량 평소 대비 ×3.5',
       thumbnailSeed: 'oil-wti-96',
       thumbnailTopic: 'oil,refinery,barrel,wti',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/17/552813-dvZDMut/20260417141904040mdkv.jpg',
     },
   },
 
@@ -221,6 +229,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '삼성전자가 HBM4 양산 출하를 세계 최초로 시작한 가운데 SK하이닉스는 4월 컨퍼런스콜에서 "HBM4 계획대로 공급 중, 차세대 HBM4E는 내년 양산"이라고 밝혔다. 엔비디아 차세대 GPU 수주 경쟁이 본격화.',
       thumbnailSeed: 'hbm4-three-months',
       thumbnailTopic: 'semiconductor,memory,nvidia',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202602/11/khan/20260211162845588mjyy.png',
     },
   },
 
@@ -237,6 +247,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '\'웃는 고래\' 상괭이의 5년간 폐사 누적이 3,839마리로 전체 해양보호생물 폐사의 68.3%를 차지하는 것으로 나타났다. 폐사 원인은 어업 혼획이 56.6%(2,174건)로 가장 많다.',
       thumbnailSeed: 'sanggwaeng-i-protect',
       thumbnailTopic: 'porpoise,marine,protection',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/08/551714-qBABr9u/20260408100745200cdbk.jpg',
     },
   },
 
@@ -253,6 +265,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '대전도시공사가 오월드 입점 11개 업소에 5월 말까지 재개장 불가를 통보했다. 금강유역환경청의 현장 합동점검과 시설 보완 절차로 어린이날 연휴에도 휴장이 유지될 예정.',
       thumbnailSeed: 'oworld-closure',
       thumbnailTopic: 'aquarium,daejeon,zoo',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/24/daejonilbo/20260424231702448liul.jpg',
     },
   },
 
@@ -269,6 +283,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '오월드가 늑구 근황을 당분간 공개하지 않기로 결정했다. 복귀 후 공개된 영상 속 시멘트 바닥과 녹슨 철창에 대한 네티즌 비판이 쏟아지자 사진·영상 촬영을 중단한 것으로 알려졌다.',
       thumbnailSeed: 'neukku-non-public',
       thumbnailTopic: 'wolf,zoo,daejeon',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/23/khan/20260423111235670okbj.png',
     },
   },
 
@@ -286,6 +302,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '호르무즈 통과 시도 선박들의 회항이 잇따르며 \'역봉쇄\' 우려가 커지고 있다. WTI는 4월 26일 96.23달러로 +1.94% 상승, 브렌트유도 92달러대로 진입했다.',
       thumbnailSeed: 'oil-price-96',
       thumbnailTopic: 'oil,price,gas,station',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/15/NEWS1/20260415054026678tsjt.jpg',
       otherPublishers: [
         { name: '연합뉴스', logoSeed: 'yna', headline: '"호르무즈 회항 속출"…\'역봉쇄\' 우려에 WTI 96달러 돌파', elapsed: '42분 전' },
         { name: '한국경제', logoSeed: 'hk', headline: '\'역봉쇄\' 현실화…유가·환율 동반 충격, 정유주 일제 급등', elapsed: '51분 전' },
@@ -313,6 +331,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '미국 밴스 부통령이 "이란이 핵 포기 의사를 보이지 않고 있다"며 최후통첩을 날린 뒤 1차 협상이 결렬됐다. 트럼프 대통령은 같은 날 휴전 무기한 연장을 발표.',
       thumbnailSeed: 'vance-iran-talks',
       thumbnailTopic: 'iran,vance,negotiation',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/12/YTN/20260412160109860immt.jpg',
       otherPublishers: [
         { name: '다음(YTN)', logoSeed: 'ytn', headline: '미-이란 첫 협상 결렬... 밴스 "이란이 핵 포기 안 해"', elapsed: '1시간 전' },
         { name: '파이낸셜뉴스', logoSeed: 'fnnews', headline: '"이란, 美에 \'우선 호르무즈 개방·종전→이후 핵협상\' 제안"', elapsed: '2시간 전' },
@@ -337,6 +357,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '시장조사 업체들이 "HBM 공급 부족이 3년 더 이어진다"고 전망한 가운데 삼성전자가 HBM4 양산 출하를 세계 최초로 시작했고 SK하이닉스도 양산 중. 양사는 차세대 HBM4E 선점 경쟁에 돌입.',
       thumbnailSeed: 'hbm4e-leadership',
       thumbnailTopic: 'semiconductor,memory,korea',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202601/29/552777-a6ToU27/20260129132355551jxuv.jpg',
       otherPublishers: [
         { name: '네이트뉴스', logoSeed: 'nate', headline: '"HBM 부족 3년 더" 날개단 삼전·SK하닉…HBM4E 선점 경쟁', elapsed: '1시간 전' },
         { name: '초이스스탁US', logoSeed: 'choicestock', headline: 'HBM4 석 달, 삼성은 \'최초\'·SK는 \'수율 안정\'…엔비디아 수주 승자는', elapsed: '2시간 전' },
@@ -361,6 +383,8 @@ export const MAI_NEWS_FEED: FeedItem[] = [
         '대전도시공사가 오월드 입점 11개 업소에 5월 말까지 재개장 불가를 통보. 금강유역환경청 합동점검 등 행정 절차로 어린이날 연휴 휴장이 확정됐고, 늑구 사육환경에 대한 비판도 이어지고 있다.',
       thumbnailSeed: 'oworld-may-closure',
       thumbnailTopic: 'zoo,daejeon,wolf',
+      thumbnailUrl:
+        'https://img1.daumcdn.net/thumb/S1200x630/?fname=https://t1.daumcdn.net/news/202604/23/551724-22lyJQR/20260423094616722jsjr.jpg',
       otherPublishers: [
         { name: '뉴스1', logoSeed: 'news1', headline: '\'늑구\' 탈출 대전 오월드 5월 재개장 불가…입점업소 특수 기대 난망', elapsed: '2시간 전' },
         { name: 'YTN', logoSeed: 'ytn', headline: '대전 오월드, 다음 달 말쯤 재개장 여부 판단…어린이날 연휴 휴장', elapsed: '3시간 전' },

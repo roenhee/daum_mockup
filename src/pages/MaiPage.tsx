@@ -4,6 +4,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { SubTabBar } from '@/components/ui/SubTabBar';
 import { MAI_GATEWAYS, MAI_PROFILE, MAI_SUBTABS } from '@/mocks/mai';
 import { MaiNewsFeed } from '@/components/mai/news/MaiNewsFeed';
+import { MaiIssueFeed } from '@/components/mai/issue/IssueNoteFeed';
 
 export function MaiPage() {
   const { subtab = 'news' } = useParams<{ subtab?: string }>();
@@ -68,6 +69,7 @@ function GatewayRow() {
 
 function SubtabBody({ id }: { id: string }) {
   if (id === 'news') return <MaiNewsFeed />;
+  if (id === 'issue') return <MaiIssueFeed />;
   const label = MAI_SUBTABS.find((t) => t.id === id)?.label ?? id;
   return (
     <section className="bg-white flex-1 min-h-[400px] flex items-center justify-center px-6">

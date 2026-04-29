@@ -4,7 +4,7 @@ import { Pause, Play, X } from 'lucide-react';
 interface PlayerTrack {
   title: string;
   duration: string;
-  variant?: 'morning' | 'evening' | 'flash';
+  variant?: 'morning' | 'evening' | 'flash' | 'deepdive';
 }
 
 interface PlayerCtxValue {
@@ -46,6 +46,7 @@ const VARIANT_EMOJI: Record<NonNullable<PlayerTrack['variant']>, string> = {
   morning: '🌅',
   evening: '🌙',
   flash: '⚡',
+  deepdive: '🎙️',
 };
 
 

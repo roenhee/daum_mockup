@@ -55,8 +55,6 @@ export function MaiExploreFeed() {
         />
       ) : null}
 
-      <ArchiveHeader />
-
       <FilterChipBar value={filter} onChange={setFilter} />
 
       <div
@@ -69,7 +67,8 @@ export function MaiExploreFeed() {
         {filtered.length === 0 ? (
           <EmptyState filter={filter} />
         ) : (
-          <div className="flex flex-col gap-2">
+          // 카드 사이 디바이더 — 마지막 카드 아래에는 표시되지 않음
+          <div className="flex flex-col divide-y divide-gray-200">
             {filtered.map((item) => (
               <ArchiveItemCard
                 key={item.id}
@@ -117,15 +116,6 @@ export function MaiExploreFullOverlay() {
       />
       <ExperimentalModal />
     </>
-  );
-}
-
-// 헤더 — 제목만 (카운트/정렬 메뉴 제거)
-function ArchiveHeader() {
-  return (
-    <div className="px-4 pt-4 pb-2">
-      <h2 className="text-[16px] font-bold text-gray-900">내 탐구 피드</h2>
-    </div>
   );
 }
 

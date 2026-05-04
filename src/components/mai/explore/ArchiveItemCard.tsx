@@ -19,11 +19,11 @@ export function ArchiveItemCard({
 
   return (
     <article
-      className="relative bg-white rounded-[12px] border overflow-hidden"
-      style={{
-        // 카드 보더는 kind 컬러 톤. hasUpdate일 때 더 진하게 (40% → 60%) 강조.
-        borderColor: meta.color + (item.hasUpdate ? '99' : '40'),
-      }}
+      className={cn(
+        'relative bg-white overflow-hidden',
+        // 작업 중 카드만 둥근 모서리 — 어두운 오버레이가 부드럽게 보이도록
+        item.inProgress && 'rounded-[12px] my-1.5',
+      )}
     >
       <button
         type="button"

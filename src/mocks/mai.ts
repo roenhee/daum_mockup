@@ -22,9 +22,16 @@ export const MAI_PROFILE: MaiProfile = {
 };
 
 export const MAI_GATEWAYS: MaiGateway[] = [
-  { id: 'history', label: '히스토리', newsLabel: '새 활동', count: 3, to: '/mai-sub/history' },
+  { id: 'history', label: '히스토리', newsLabel: '새 활동', count: 3, to: '/mai-history/recent' },
   { id: 'subscribe', label: '구독', newsLabel: '새 글', count: 12, to: '/mai-sub/subscribe' },
   { id: 'community', label: '커뮤니티', newsLabel: '새 댓글', count: 5, to: '/mai-sub/community' },
+];
+
+export const MAI_HISTORY_SUBTABS: SubTab[] = [
+  { id: 'recent', label: '최근본', to: '/mai-history/recent' },
+  { id: 'reaction', label: '반응', to: '/mai-history/reaction' },
+  { id: 'comments', label: '댓글', to: '/mai-history/comments' },
+  { id: 'saved', label: '찜', to: '/mai-history/saved' },
 ];
 
 export const MAI_SUB_PAGE_TITLES: Record<string, string> = {

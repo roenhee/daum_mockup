@@ -13,6 +13,9 @@ interface PlayerCtxValue {
   play: (track: PlayerTrack) => void;
   toggle: () => void;
   stop: () => void;
+  // 다른 위치에서 미니플레이어를 직접 렌더할 때 기본 위치는 숨긴다 (ex. AI탐구 바텀시트가 자기 위에 띄울 때).
+  suppressDefault: boolean;
+  setSuppressDefault: (v: boolean) => void;
 }
 
 const PlayerCtx = createContext<PlayerCtxValue | null>(null);
@@ -20,6 +23,7 @@ const PlayerCtx = createContext<PlayerCtxValue | null>(null);
 export function MaiPlayerProvider({ children }: { children: ReactNode }) {
   const [track, setTrack] = useState<PlayerTrack | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [suppressDefault, setSuppressDefault] = useState(false);
 
   const value: PlayerCtxValue = {
     track,
@@ -33,6 +37,8 @@ export function MaiPlayerProvider({ children }: { children: ReactNode }) {
       setTrack(null);
       setPlaying(false);
     },
+    suppressDefault,
+    setSuppressDefault,
   };
 
   return <PlayerCtx.Provider value={value}>{children}</PlayerCtx.Provider>;
@@ -50,7 +56,7 @@ const VARIANT_EMOJI: Record<NonNullable<PlayerTrack['variant']>, string> = {
 };
 
 
-export function MaiMiniPlayer() {
+export function MaiMiniPlayer({ forceRender = false }: { forceRender?: boolean } = {}) {
   const ctx = useContext(PlayerCtx);
   const [progress, setProgress] = useState(0);
 
@@ -67,6 +73,7 @@ export function MaiMiniPlayer() {
   }, [ctx?.playing, ctx?.track?.title]);
 
   if (!ctx?.track) return null;
+  if (ctx.suppressDefault && !forceRender) return null;
   const { track, playing, toggle, stop } = ctx;
   const variant = track.variant ?? 'morning';
 

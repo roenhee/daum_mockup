@@ -5,9 +5,34 @@ import { SubTabBar } from '@/components/ui/SubTabBar';
 import { MAI_GATEWAYS, MAI_PROFILE, MAI_SUBTABS } from '@/mocks/mai';
 import { MaiNewsFeed } from '@/components/mai/news/MaiNewsFeed';
 import { MaiIssueFeed } from '@/components/mai/issue/IssueNoteFeed';
+import {
+  MaiExploreFeed,
+  MaiExploreFullOverlay,
+  MaiExploreMainOverlay,
+} from '@/components/mai/explore/ExploreFeed';
+import { ExploreProvider } from '@/components/mai/explore/ExploreContext';
 
 export function MaiPage() {
   const { subtab = 'news' } = useParams<{ subtab?: string }>();
+
+  if (subtab === 'explore') {
+    return (
+      <ExploreProvider>
+        <AppShell
+          variant="mai"
+          mainOverlay={<MaiExploreMainOverlay />}
+          fullOverlay={<MaiExploreFullOverlay />}
+        >
+          <div className="flex flex-col bg-white">
+            <ProfileSection />
+            <GatewayRow />
+            <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
+            <MaiExploreFeed />
+          </div>
+        </AppShell>
+      </ExploreProvider>
+    );
+  }
 
   return (
     <AppShell variant="mai">

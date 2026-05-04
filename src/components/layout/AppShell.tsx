@@ -13,6 +13,10 @@ interface AppShellProps {
   bodyClassName?: string;
   scrollableHeader?: boolean;
   bottomOverlay?: ReactNode;
+  /** 스크롤 컨테이너의 visible 영역 위에 렌더되는 오버레이 (FAB/바텀시트용). */
+  mainOverlay?: ReactNode;
+  /** 헤더/하단탭까지 포함한 phone frame 전체를 덮는 오버레이 (풀스크린 dim 바텀시트용). */
+  fullOverlay?: ReactNode;
 }
 
 export function AppShell({
@@ -22,6 +26,8 @@ export function AppShell({
   bodyClassName,
   scrollableHeader,
   bottomOverlay,
+  mainOverlay,
+  fullOverlay,
 }: AppShellProps) {
   const dark = variant === 'loop';
   const mainRef = useRef<HTMLElement>(null);
@@ -30,7 +36,7 @@ export function AppShell({
   return (
     <div
       className={cn(
-        'flex flex-col h-full',
+        'relative flex flex-col h-full',
         dark ? 'bg-black text-white' : 'bg-white text-gray-900',
       )}
     >
@@ -47,10 +53,12 @@ export function AppShell({
           {children}
         </main>
         <ScrollIndicator targetRef={mainRef} />
+        {mainOverlay}
       </div>
       {bottomOverlay}
       <MaiMiniPlayer />
       <BottomTabBar />
+      {fullOverlay}
     </div>
   );
 }

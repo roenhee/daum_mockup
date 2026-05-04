@@ -25,3 +25,18 @@ body {
     scrollbar-width: none;
   }
 }
+
+@keyframes mai-sheet-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes mai-sheet-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.mai-sheet-scrim {
+  animation: mai-sheet-fade-in 180ms ease-out;
+}
+.mai-sheet-panel {
+  animation: mai-sheet-slide-up 240ms ease-out;
+}

@@ -52,7 +52,7 @@ export function ScrollIndicator({ targetRef }: ScrollIndicatorProps) {
     <div
       aria-hidden
       className={cn(
-        'absolute right-1 w-1 rounded-full bg-black/30 transition-opacity duration-200 pointer-events-none',
+        'absolute right-1 w-1 rounded-full bg-black/30 transition-opacity duration-200 pointer-events-none z-40',
         hovered ? 'opacity-100' : 'opacity-0',
       )}
       style={{ top: thumb.top, height: thumb.height }}

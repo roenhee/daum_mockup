@@ -62,8 +62,8 @@ export function MaiExploreFeed() {
       <div
         className={cn(
           'px-3 pt-2',
-          // 실험 모드에서는 채팅 입력 백드롭(약 76px) 위로 마지막 카드가 올라오도록 여유 패딩
-          filter === 'experimental' ? 'pb-24' : 'pb-6',
+          // 실험 모드에서는 채팅 입력 백드롭(약 68px) 위로 마지막 카드가 노출되되 간격은 좁게
+          filter === 'experimental' ? 'pb-[76px]' : 'pb-6',
         )}
       >
         {filtered.length === 0 ? (

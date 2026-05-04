@@ -73,38 +73,42 @@ export function SettingsSubtab() {
         </ul>
       </section>
 
-      <div aria-hidden className="h-2 bg-gray-100" />
+      {typeTab === 'press' ? (
+        <>
+          <div aria-hidden className="h-2 bg-gray-100" />
 
-      <section className="pb-6">
-        <div className="px-4 pt-5 pb-2">
-          <h2 className="text-[15px] font-bold text-gray-900">
-            관심 있는 언론사를 구독해 보세요
-          </h2>
-        </div>
-        <CategoryChipBar value={category} onChange={setCategory} />
-        <p className="px-4 pt-2 pb-1 text-[12px] text-gray-400">
-          최근 24시간 내 발행한 매체만 배열됩니다.
-        </p>
-        <ul>
-          {recommendations.map((r) => (
-            <li key={r.id}>
-              <RecommendRow
-                avatarUrl={r.avatarUrl}
-                name={r.name}
-                subscribed={subscribedRec.has(r.id)}
-                onToggle={() =>
-                  setSubscribedRec((prev) => {
-                    const next = new Set(prev);
-                    if (next.has(r.id)) next.delete(r.id);
-                    else next.add(r.id);
-                    return next;
-                  })
-                }
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
+          <section className="pb-6">
+            <div className="px-4 pt-5 pb-2">
+              <h2 className="text-[15px] font-bold text-gray-900">
+                관심 있는 언론사를 구독해 보세요
+              </h2>
+            </div>
+            <CategoryChipBar value={category} onChange={setCategory} />
+            <p className="px-4 pt-2 pb-1 text-[12px] text-gray-400">
+              최근 24시간 내 발행한 매체만 배열됩니다.
+            </p>
+            <ul>
+              {recommendations.map((r) => (
+                <li key={r.id}>
+                  <RecommendRow
+                    avatarUrl={r.avatarUrl}
+                    name={r.name}
+                    subscribed={subscribedRec.has(r.id)}
+                    onToggle={() =>
+                      setSubscribedRec((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(r.id)) next.delete(r.id);
+                        else next.add(r.id);
+                        return next;
+                      })
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      ) : null}
     </main>
   );
 }

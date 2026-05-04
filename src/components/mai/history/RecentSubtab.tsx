@@ -80,7 +80,7 @@ export function RecentSubtab() {
       </div>
 
       <ul className={cn(editing ? 'pb-0' : 'pb-4')}>
-        {RECENT_HISTORY_GROUPS.map((group, idx) => (
+        {RECENT_HISTORY_GROUPS.map((group) => (
           <li key={group.dateLabel}>
             <div aria-hidden className="h-2 bg-gray-100" />
             <h2 className="px-4 pt-4 pb-2 text-[13px] font-bold text-gray-900">

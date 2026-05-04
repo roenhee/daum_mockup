@@ -47,6 +47,8 @@ export function MaiExploreFeed() {
 
   return (
     <div className="bg-white">
+      <FilterChipBar value={filter} onChange={setFilter} />
+
       {!recDismissed ? (
         <RecommendCard
           rec={ACTIVE_RECOMMENDATION}
@@ -55,11 +57,10 @@ export function MaiExploreFeed() {
         />
       ) : null}
 
-      <FilterChipBar value={filter} onChange={setFilter} />
-
       <div
         className={cn(
-          'px-3 pt-2',
+          // pt-3: 추천 카드가 닫혔을 때는 칩 디바이더와, 노출 시에는 추천 카드 바닥과 12px 간격 확보
+          'px-3 pt-3',
           // 실험 모드에서는 채팅 입력 백드롭(약 68px) 위로 마지막 카드가 노출되되 간격은 좁게
           filter === 'experimental' ? 'pb-[76px]' : 'pb-6',
         )}
@@ -68,7 +69,8 @@ export function MaiExploreFeed() {
           <EmptyState filter={filter} />
         ) : (
           // 카드 사이 디바이더 — 마지막 카드 아래에는 표시되지 않음
-          <div className="flex flex-col divide-y divide-gray-200">
+          // 첫 카드의 my-1.5(작업 중 카드 breathing room) 상단을 제거해 칩 바와 일정한 간격 유지
+          <div className="flex flex-col divide-y divide-gray-200 [&>*:first-child]:mt-0">
             {filtered.map((item) => (
               <ArchiveItemCard
                 key={item.id}
@@ -132,11 +134,11 @@ function FilterChipBar({
       ref={ref}
       {...handlers}
       className={cn(
-        'overflow-x-auto no-scrollbar select-none touch-pan-x bg-white',
+        'border-b border-gray-100 overflow-x-auto no-scrollbar select-none touch-pan-x bg-white',
         isDragging ? 'cursor-grabbing' : 'cursor-grab',
       )}
     >
-      <div className="flex items-center min-w-max gap-1.5 py-2 px-3">
+      <div className="flex items-center min-w-max gap-1.5 py-3 px-3">
         <Chip
           label="전체"
           active={value === 'all'}

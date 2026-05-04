@@ -9,6 +9,7 @@ import { MaiPage } from '@/pages/MaiPage';
 import { MaiSubPage } from '@/pages/MaiSubPage';
 import { MaiHistoryPage } from '@/pages/MaiHistoryPage';
 import { MaiSubscribePage } from '@/pages/MaiSubscribePage';
+import { MaiNotificationPage } from '@/pages/MaiNotificationPage';
 import { NewsDetailPage } from '@/pages/NewsDetailPage';
 import { ChannelViewPage } from '@/pages/ChannelViewPage';
 import { SearchPage } from '@/pages/SearchPage';
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/mai-history/:tab" element={<MaiHistoryPage />} />
             <Route path="/mai-subscribe" element={<Navigate to="/mai-subscribe/channels" replace />} />
             <Route path="/mai-subscribe/:tab" element={<MaiSubscribePage />} />
+            <Route path="/mai-notification" element={<MaiNotificationPage />} />
             <Route path="/news/:id" element={<NewsDetailPage />} />
             <Route path="/channel/:id" element={<ChannelViewPage />} />
             <Route path="/search" element={<SearchPage />} />

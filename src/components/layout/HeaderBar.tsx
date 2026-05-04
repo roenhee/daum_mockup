@@ -69,7 +69,7 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
       <HeaderShell noBorder>
         <span className="text-[17px] font-bold">M:AI</span>
         <div className="flex items-center -mr-1.5">
-          <Link to="/mai-sub/notification" aria-label="알림" className="p-1.5 text-gray-900">
+          <Link to="/mai-notification" aria-label="알림" className="p-1.5 text-gray-900">
             <Icon src="/icons/nav/notification.svg" size={24} />
           </Link>
           <Link to="/mai-sub/settings" aria-label="설정" className="p-1.5 text-gray-900">

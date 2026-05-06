@@ -9,7 +9,7 @@ import { CreateExploreSheet } from './CreateExploreSheet';
 import { useExplore } from './ExploreContext';
 import { ExperimentalChatInput, ExperimentalModal } from './ExperimentalSurface';
 
-type FilterId = 'all' | 'inProgress' | 'favorites' | 'experimental';
+type FilterId = 'inProgress' | 'favorites' | 'experimental';
 
 // 스크롤 영역 안에 들어가는 본문. 추천 카드 + 아카이브.
 export function MaiExploreFeed() {
@@ -21,7 +21,7 @@ export function MaiExploreFeed() {
     openSheetFromRec,
     setExperimentalActive,
   } = useExplore();
-  const [filter, setFilter] = useState<FilterId>('all');
+  const [filter, setFilter] = useState<FilterId>('experimental');
 
   // 실험 칩 진입/이탈을 컨텍스트에 알림 — chat input/modal 오버레이가 이를 보고 켜짐
   useEffect(() => {
@@ -140,17 +140,10 @@ function FilterChipBar({
     >
       <div className="flex items-center min-w-max gap-1.5 py-3 px-3">
         <Chip
-          label="전체"
-          active={value === 'all'}
-          onClick={() => onChange('all')}
-        />
-        <Chip
-          label="실험"
+          label="내 콘텐츠"
           active={value === 'experimental'}
           onClick={() => onChange('experimental')}
         />
-        {/* 시각 구분선 — 실험은 다른 모드(전체/작업중/즐겨찾기에 영향 받지 않음) */}
-        <span className="w-px h-5 bg-gray-200 shrink-0" aria-hidden />
         <Chip
           label="작업 중"
           active={value === 'inProgress'}

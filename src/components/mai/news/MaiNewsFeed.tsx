@@ -25,7 +25,7 @@ const ARTICLE_KINDS = new Set(['n1a', 'n1b']);
 const FLAT_KINDS = new Set(['n11', 'n8a', 'n8b']);
 const NO_STATUS_KINDS = new Set(['n14']);
 // "내 주변" 칩에서만 노출되는 컨텍스트성 슬롯
-const CONTEXT_KINDS = new Set(['n9a', 'n19', 'n20a', 'n20b']);
+const CONTEXT_KINDS = new Set(['n9a', 'n9b', 'n19', 'n20a', 'n20b']);
 // 키워드 필터에서 제외되는 슬롯 (브리핑·트렌딩 등 멀티 주제)
 const NON_ARTICLE_KINDS = new Set(['n17', 'n14']);
 
@@ -107,39 +107,61 @@ function slotMatchesKeyword(item: FeedItem, kw: string): boolean {
   );
 }
 
-// Fisher-Yates shuffle (mutates copy)
-function shuffle<T>(arr: T[], seed: number): T[] {
-  const copy = [...arr];
-  let s = seed;
-  const rand = () => {
-    s = (s * 9301 + 49297) % 233280;
-    return s / 233280;
-  };
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+// 예시 모드 시퀀스 — MAI_NEWS_FEED 원본 인덱스 기준.
+// 시간대: 모닝 브리핑(아침) → 출근길 → 11:30 시장 → 오후 날씨 → 이브닝 브리핑.
+// 기사 슬롯(n1a/n1b)은 2개 이상 연달아 묶음으로 배치한다.
+const FEED_EXAMPLE_ORDER = [
+  23, // n17a 모닝 브리핑
+  17, // n9a 출근 경로
+  0,  // n1a 호르무즈 통항 15척
+  19, // n11a 보도량 급증 (이란 전쟁)
+  8,  // n1b 호르무즈 역봉쇄 다매체
+  1,  // n1a 이란 미국 제안
+  12, // n4a 키워드 추천 (행동)
+  9,  // n1b 이란-미 핵협상 결렬
+  3,  // n1a WTI 96달러
+  15, // n8b 후속 동일 기자 (이란)
+  18, // n9b 삼성전자 +5.4% (오전 11:30)
+  20, // n11b 신규 키워드 HBM4E
+  2,  // n1a 코스피 사상 최고
+  10, // n1b HBM4 양산
+  4,  // n1a HBM4 석 달
+  14, // n8a 후속 시리즈 (반도체)
+  13, // n4b 키워드 추천 (인접)
+  16, // n9a 오후 비 소식
+  21, // n14a 트렌딩 전체
+  5,  // n1a 상괭이
+  11, // n1b 오월드 5월 재개장
+  7,  // n1a 늑구
+  6,  // n1a 아쿠아리움 오월드
+  25, // n18 속보 (늑구)
+  26, // n19a 동네 인기 (대전 중구)
+  27, // n19b 광역 인기 (대전)
+  28, // n20a 사람들 인기 기사
+  29, // n20b 사람들 신규 구독
+  22, // n14b 트렌딩 인접
+  24, // n17b 이브닝 브리핑
+];
 
-// 피드 모드: 상위 3개는 기사(N-1a/N-1b), 나머지는 랜덤
-function buildFeedItems<T extends { item: FeedItem }>(
+function buildFeedItems<T extends { item: FeedItem; idx: number }>(
   pairs: T[],
-  seed: number,
 ): T[] {
-  const articles = pairs.filter((p) => ARTICLE_KINDS.has(p.item.kind));
-  const nonArticles = pairs.filter((p) => !ARTICLE_KINDS.has(p.item.kind));
-  const shuffledArticles = shuffle(articles, seed);
-  const top = shuffledArticles.slice(0, 3);
-  const restArticles = shuffledArticles.slice(3);
-  const rest = shuffle([...restArticles, ...nonArticles], seed + 13);
-  return [...top, ...rest];
+  const byIdx = new Map(pairs.map((p) => [p.idx, p]));
+  const out: T[] = [];
+  for (const i of FEED_EXAMPLE_ORDER) {
+    const p = byIdx.get(i);
+    if (p) out.push(p);
+  }
+  // 시퀀스에 누락된 슬롯이 있으면 뒤에 붙여 — 데이터 추가 시 안전장치
+  for (const p of pairs) {
+    if (!FEED_EXAMPLE_ORDER.includes(p.idx)) out.push(p);
+  }
+  return out;
 }
 
 export function MaiNewsFeed() {
   const [filter, setFilter] = useState<FilterMode>('all');
   const [keywordSheetOpen, setKeywordSheetOpen] = useState(false);
-  const [feedSeed] = useState(() => Date.now() % 100000);
   const [overrides, setOverrides] = useState<Map<number, boolean>>(new Map());
   const isRead = (idx: number) => overrides.get(idx) ?? idx >= 5;
   const toggleRead = (idx: number) => {
@@ -163,7 +185,7 @@ export function MaiNewsFeed() {
 
   // 필터 모드에 따른 슬롯 결정
   const visibleItems = useMemo(() => {
-    if (filter === 'feed') return buildFeedItems(indexedAll, feedSeed);
+    if (filter === 'feed') return buildFeedItems(indexedAll);
     if (filter === 'nearby') {
       return indexedAll.filter(({ item }) => CONTEXT_KINDS.has(item.kind));
     }
@@ -173,7 +195,7 @@ export function MaiNewsFeed() {
       );
     }
     return indexedAll;
-  }, [filter, activeKeyword, indexedAll, feedSeed]);
+  }, [filter, activeKeyword, indexedAll]);
 
   const groups = groupItems(visibleItems);
 
@@ -273,16 +295,8 @@ function KeywordChipBar({
       )}
     >
       <div className="flex items-center min-w-max gap-1.5 py-2.5">
-        <div className="pl-3 shrink-0">
-          <ChipButton
-            label="피드"
-            active={value === 'feed'}
-            onClick={() => onChange('feed')}
-            dim
-          />
-        </div>
         {/* 전체 + 내 주변 + 디바이더: 전체 칩이 좌측에 닿으면 sticky로 함께 고정 */}
-        <div className="sticky left-0 z-10 flex items-center gap-1.5 bg-white shrink-0 pr-1">
+        <div className="sticky left-0 z-10 flex items-center gap-1.5 bg-white shrink-0 pl-3 pr-1">
           <ChipButton
             label="전체"
             active={value === 'all'}
@@ -306,6 +320,11 @@ function KeywordChipBar({
             onClick={() => onChange(kw)}
           />
         ))}
+        <ChipButton
+          label="예시"
+          active={value === 'feed'}
+          onClick={() => onChange('feed')}
+        />
         <div className="pr-3 shrink-0">
           <button
             type="button"
@@ -325,12 +344,10 @@ function ChipButton({
   label,
   active,
   onClick,
-  dim,
 }: {
   label: string;
   active: boolean;
   onClick: () => void;
-  dim?: boolean;
 }) {
   return (
     <button
@@ -342,7 +359,6 @@ function ChipButton({
         active
           ? 'bg-gray-900 text-white border-gray-900'
           : 'bg-white text-gray-700 border-gray-200',
-        dim && 'opacity-50',
       )}
     >
       {label}

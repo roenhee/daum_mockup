@@ -72,7 +72,7 @@ export function HeaderBar({ variant, onOpenMenu }: HeaderBarProps) {
           <Link to="/mai-notification" aria-label="알림" className="p-1.5 text-gray-900">
             <Icon src="/icons/nav/notification.svg" size={24} />
           </Link>
-          <Link to="/mai-sub/settings" aria-label="설정" className="p-1.5 text-gray-900">
+          <Link to="/mai-settings" aria-label="설정" className="p-1.5 text-gray-900">
             <Settings size={24} strokeWidth={1.8} />
           </Link>
           <IconBtn aria-label="검색" type="button">

@@ -46,7 +46,7 @@ export function SearchKeywordSubscribe({
             {i > 0 ? (
               <span
                 aria-hidden
-                className="w-px self-stretch bg-gray-200 shrink-0"
+                className="w-px self-stretch my-3 bg-gray-200 shrink-0"
               />
             ) : null}
             <KeywordCard item={k} />

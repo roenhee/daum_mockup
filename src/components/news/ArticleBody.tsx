@@ -1,18 +1,21 @@
-import { Filter, Volume2, Sparkles, Type, MessageCircle } from 'lucide-react';
+import { Filter, Volume2, Sparkles, Type, MessageCircle, Headphones } from 'lucide-react';
 import type { ArticleDetail } from '@/mocks/newsDetail';
 import { BizBoard } from '@/components/ui/BizBoard';
+import { ArticleKeywordTags } from './NewsKeywordSlots';
 
 interface ArticleBodyProps {
   article: ArticleDetail;
   commentCount: number;
+  keywords?: string[];
 }
 
-export function ArticleBody({ article, commentCount }: ArticleBodyProps) {
+export function ArticleBody({ article, commentCount, keywords }: ArticleBodyProps) {
   return (
     <article className="bg-white px-4 pt-5 pb-6">
       <h1 className="text-[22px] font-bold leading-snug text-gray-900">
         {article.title}
       </h1>
+      {keywords ? <ArticleKeywordTags keywords={keywords} /> : null}
       <div className="mt-3 flex items-center gap-1.5 text-[12px] text-gray-500">
         <span>{article.reporter}</span>
         <span className="text-gray-300">·</span>
@@ -24,6 +27,14 @@ export function ArticleBody({ article, commentCount }: ArticleBodyProps) {
           <span>댓글 {commentCount.toLocaleString()}</span>
         </span>
         <div className="flex items-center gap-0.5">
+          <button
+            type="button"
+            aria-label="팟캐스트로 듣기"
+            className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-[11.5px] font-semibold text-daum-blue bg-daum-blue/10 mr-0.5"
+          >
+            <Headphones size={12} strokeWidth={2.4} />
+            팟캐스트
+          </button>
           <ToolBtn aria-label="필터">
             <Filter size={16} />
           </ToolBtn>

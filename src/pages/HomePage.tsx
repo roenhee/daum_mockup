@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { HomeSideMenu } from '@/components/sidemenu/HomeSideMenu';
+import { AiSuggestBubble } from '@/components/notification/AiSuggestBubble';
 import { RealtimeTrend } from '@/components/home/RealtimeTrend';
 import { WidgetCarousel } from '@/components/home/WidgetCarousel';
 import { IssueSlot } from '@/components/home/IssueSlot';
@@ -10,6 +11,11 @@ import { SubscribedPublishers } from '@/components/home/SubscribedPublishers';
 import { PublisherLiveSection } from '@/components/home/PublisherLiveSection';
 import { CommunitySection } from '@/components/home/CommunitySection';
 import { HotStocks } from '@/components/home/HotStocks';
+import {
+  KoreaDailyBriefingCard,
+  MaiIssueNotePreview,
+  MaiPromoBanner,
+} from '@/components/home/MaiHomeCards';
 import { AdBanner } from '@/components/ui/AdBanner';
 import { REALTIME_TRENDS } from '@/mocks/trends';
 import { HOME_NEWS_FEED, HERO_PHOTO_NEWS } from '@/mocks/news';
@@ -29,7 +35,9 @@ function Gap() {
 export function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const issues = HOME_NEWS_FEED.slice(0, 4);
-  const feedA = HOME_NEWS_FEED.slice(4, 7);
+  // 브리핑 카드를 feedA 중간에 끼워 넣기 위해 두 토막으로 분리
+  const feedA1 = HOME_NEWS_FEED.slice(4, 6);
+  const feedA2 = HOME_NEWS_FEED.slice(6, 7);
   const feedB = HOME_NEWS_FEED.slice(7, 11);
   const feedC = HOME_NEWS_FEED.slice(11, 15);
   const feedD = HOME_NEWS_FEED.slice(15);
@@ -39,15 +47,23 @@ export function HomePage() {
       variant="home"
       scrollableHeader
       onOpenMenu={() => setMenuOpen(true)}
-      fullOverlay={<HomeSideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />}
+      fullOverlay={
+        <>
+          <HomeSideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+          <AiSuggestBubble />
+        </>
+      }
     >
       <div className="bg-gray-100 flex flex-col">
         <RealtimeTrend trends={REALTIME_TRENDS} />
         <WidgetCarousel weather={HOME_WEATHER} kospi={KOSPI_SUMMARY} />
         <IssueSlot issues={issues} />
+        <MaiPromoBanner />
         <Gap />
 
-        <NewsFeed articles={feedA} />
+        <NewsFeed articles={feedA1} />
+        <KoreaDailyBriefingCard />
+        <NewsFeed articles={feedA2} />
         <Gap />
 
         <ShortsSection items={HOME_SHORTS} />
@@ -57,6 +73,9 @@ export function HomePage() {
           publishers={SUBSCRIBED_PUBLISHERS}
           featured={HERO_PHOTO_NEWS}
         />
+        <Gap />
+
+        <MaiIssueNotePreview />
         <Gap />
 
         <PublisherLiveSection publisherName="한겨레" item={LIVE_CONTENTS[0]} />
@@ -71,9 +90,6 @@ export function HomePage() {
           showCategory
           timestamp={SECTION_TIMESTAMP}
         />
-        <Gap />
-
-        <AdBanner ad={HOME_ADS[1]} />
         <Gap />
 
         <HotStocks timestamp={SECTION_TIMESTAMP} />

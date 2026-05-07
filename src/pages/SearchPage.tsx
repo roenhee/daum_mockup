@@ -5,6 +5,11 @@ import { SearchInputScreen } from '@/components/search/SearchInputScreen';
 import { SearchTabBar } from '@/components/search/SearchTabBar';
 import { RelatedKeywords } from '@/components/search/RelatedKeywords';
 import { AiSummarySection } from '@/components/search/AiSummarySection';
+import {
+  SearchKeywordSubscribe,
+  SearchAudioBriefing,
+  type SearchKeywordCard,
+} from '@/components/search/SearchMaiSlots';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import {
   PowerlinkSection,
@@ -22,6 +27,7 @@ import { RealtimeTrendStrip } from '@/components/search/RealtimeTrendStrip';
 import { ScrollIndicator } from '@/components/layout/ScrollIndicator';
 import { UrlTopBar } from '@/components/layout/UrlTopBar';
 import { InAppBrowserBar } from '@/components/layout/InAppBrowserBar';
+import { MaiMiniPlayer } from '@/components/mai/news/MaiPlayer';
 import {
   RECENT_KEYWORDS,
   SEARCH_TABS,
@@ -33,6 +39,15 @@ import { HOME_SHORTS } from '@/mocks/shorts';
 function Gap() {
   return <div className="h-1 bg-gray-100 shrink-0" aria-hidden />;
 }
+
+const SEARCH_KEYWORD_CARDS: SearchKeywordCard[] = [
+  { keyword: '한미정상회담', subscribers: '4.2만 명', note: '오늘 보도량 ×3.6' },
+  { keyword: '비핵화', subscribers: '2.8만 명', note: '북한 정책 동향' },
+  { keyword: '대북지원', subscribers: '1.4만 명', note: '인도적 접근 의제' },
+  { keyword: '백악관', subscribers: '8.4천 명', note: '해외 일정 키워드' },
+  { keyword: '한미동맹', subscribers: '5.6만 명', note: '경제·안보 의제' },
+  { keyword: '북한 인권', subscribers: '6.5천 명', note: '국제기구 보고서' },
+];
 
 export function SearchPage() {
   const navigate = useNavigate();
@@ -79,7 +94,14 @@ export function SearchPage() {
                 <Gap />
                 <AiSummarySection query={query} />
                 <Gap />
+                <SearchKeywordSubscribe
+                  query={query}
+                  keywords={SEARCH_KEYWORD_CARDS}
+                />
+                <Gap />
                 <PowerlinkSection />
+                <Gap />
+                <SearchAudioBriefing query={query} />
                 <Gap />
                 <NewsSection query={query} />
                 <Gap />
@@ -108,6 +130,7 @@ export function SearchPage() {
             </main>
             <ScrollIndicator targetRef={mainRef} />
           </div>
+          <MaiMiniPlayer />
           <InAppBrowserBar onHome={() => navigate('/')} />
         </>
       )}

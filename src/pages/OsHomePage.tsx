@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { asset } from '@/lib/asset';
 import { openDeck } from '@/lib/deckLink';
+import { usePushNotification } from '@/components/notification/PushNotificationProvider';
 import { cn } from '@/lib/cn';
 
 interface AppDef {
@@ -192,6 +193,13 @@ const DOCK_APPS: AppDef[] = [
 ];
 
 export function OsHomePage() {
+  const { trigger: triggerPush } = usePushNotification();
+
+  // 푸시 앱 → 랜덤 푸시만 띄우고 OS 홈에 머무름. 토스트 탭 시 해당 탭으로 이동.
+  const apps = APPS.map((app) =>
+    app.label === 'Daum 푸시 알림' ? { ...app, onClick: triggerPush } : app,
+  );
+
   return (
     <div className="relative w-full h-full">
       {/* 사용자 제공 월페이퍼 — 상태바 뒤까지 풀블리드 */}
@@ -205,7 +213,7 @@ export function OsHomePage() {
 
       <div className="relative w-full h-full flex flex-col text-white">
         <div className="flex-1 min-h-0 px-4 pt-3 pb-6 grid grid-cols-4 auto-rows-min gap-y-4 gap-x-2 content-start">
-          {APPS.map((app) => (
+          {apps.map((app) => (
             <AppTile key={app.label} app={app} />
           ))}
         </div>

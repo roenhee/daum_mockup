@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight, Play, Sparkles, Sprout } from 'lucide-react';
+import { I1DailyDigest } from '@/components/mai/issue/IssueNoteCards';
+import { MAI_ISSUE_FEED } from '@/mocks/maiIssue';
 
-const NOTE_CHIP =
-  'inline-flex items-center px-1.5 py-[2px] rounded-md bg-[#F1ECE0] text-[10.5px] font-semibold text-[#5C5340]';
 const BRIEF_CHIP =
   'inline-flex items-center px-2 py-[3px] rounded-full bg-white/70 text-[10.5px] font-semibold text-[#7A4A1A] backdrop-blur-sm';
+
+// 홈탭 미리보기에 노출할 데일리 다이제스트 — 이슈 노트 피드의 i1a (단일 주제)와 동일
+const HOME_DIGEST = (() => {
+  const item = MAI_ISSUE_FEED.find((it) => it.kind === 'i1a');
+  if (!item) throw new Error('홈 디지스트 미리보기에 사용할 i1a 슬롯을 찾을 수 없음');
+  return item.data;
+})();
 
 /* ─────────── 대한민국 오늘의 브리핑 — N17 모닝 변형 톤 ─────────── */
 export function KoreaDailyBriefingCard() {
@@ -94,67 +101,43 @@ export function KoreaDailyBriefingCard() {
   );
 }
 
-/* ─────────── 이슈 노트 프리뷰 카드 ─────────── */
+/* ─────────── 이슈 노트 프리뷰 카드 — 이슈 노트 탭 I-1 데일리 다이제스트와 동일 디자인 ─────────── */
 export function MaiIssueNotePreview() {
   return (
-    <section className="bg-white px-3 py-4">
-      <div className="flex items-center justify-between mb-2.5 px-1">
+    <section className="bg-white">
+      <div className="flex items-center justify-between px-4 pt-4 pb-2">
         <h2 className="text-[14px] font-extrabold text-gray-900">
           오늘의 이슈 노트
         </h2>
         <span className="text-[11px] text-gray-400">M:AI · 이슈 노트</span>
       </div>
 
-      <article className="relative bg-white rounded-card border border-[#E8DFC8] overflow-hidden">
-        <div className="h-[3px] bg-gradient-to-r from-[#E89B2A] to-[#C75B0E]" />
-        <div className="px-4 pt-3.5 pb-3">
-          <div className="flex items-center gap-1.5 text-[10.5px] font-semibold tracking-wide text-[#8A7E66]">
-            <span className="uppercase text-[#C75B0E]">데일리 다이제스트</span>
-            <span className="text-[#D6CDB6]">·</span>
-            <span>No. 142</span>
-            <span className="text-[#D6CDB6]">·</span>
-            <span>오늘 7:00</span>
-          </div>
-          <h3 className="mt-1.5 text-[16px] font-extrabold text-[#1F1B14] leading-snug">
-            오늘 이란 전쟁 핵심 3가지
-          </h3>
-          <div className="mt-2 flex flex-wrap gap-1">
-            <span className={NOTE_CHIP}>#이란 전쟁</span>
-            <span className={NOTE_CHIP}>#호르무즈</span>
-            <span className={NOTE_CHIP}>#유가</span>
-          </div>
-          <p className="mt-2.5 text-[13.5px] text-[#3D362A] leading-[1.7]">
-            오늘 이란 전쟁 핵심 3가지 — 호르무즈 통항 제한 조치, 미군 항모
-            진입, 국제유가 급등으로의 연쇄 반응까지 한 호흡으로 정리했어요.
-          </p>
-          <p className="mt-2.5 text-[11px] text-[#8A7E66]">
-            기사 12건 기반 · M:AI가 합성
-          </p>
-        </div>
-      </article>
+      <I1DailyDigest data={HOME_DIGEST} />
 
-      <Link
-        to="/mai/issue"
-        className="mt-3 flex items-center justify-between rounded-card bg-gray-50 px-4 py-3 active:bg-gray-100"
-      >
-        <span className="flex items-center gap-2">
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#C75B0E]/10 text-[#C75B0E]">
-            <ArrowRight size={14} strokeWidth={2.4} />
-          </span>
-          <span className="flex flex-col leading-tight">
-            <span className="text-[13px] font-bold text-gray-900">
-              이 이슈 자세히 보기
+      <div className="px-3 pt-2 pb-4">
+        <Link
+          to="/mai/issue"
+          className="flex items-center justify-between rounded-card bg-gray-50 px-4 py-3 active:bg-gray-100"
+        >
+          <span className="flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#C75B0E]/10 text-[#C75B0E]">
+              <ArrowRight size={14} strokeWidth={2.4} />
             </span>
-            <span className="text-[11px] text-gray-500 mt-0.5">
-              흐름 / 다매체 논조 / 근거 기사까지 정리
+            <span className="flex flex-col leading-tight">
+              <span className="text-[13px] font-bold text-gray-900">
+                이 이슈 자세히 보기
+              </span>
+              <span className="text-[11px] text-gray-500 mt-0.5">
+                흐름 / 다매체 논조 / 근거 기사까지 정리
+              </span>
             </span>
           </span>
-        </span>
-        <span className="inline-flex items-center gap-0.5 text-[12px] font-semibold text-[#C75B0E] shrink-0">
-          M:AI 탭
-          <ChevronRight size={14} strokeWidth={2.4} />
-        </span>
-      </Link>
+          <span className="inline-flex items-center gap-0.5 text-[12px] font-semibold text-[#C75B0E] shrink-0">
+            M:AI 탭
+            <ChevronRight size={14} strokeWidth={2.4} />
+          </span>
+        </Link>
+      </div>
     </section>
   );
 }

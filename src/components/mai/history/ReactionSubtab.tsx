@@ -58,7 +58,6 @@ export function ReactionSubtab() {
   return (
     <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar relative">
       <div className="flex items-center gap-2 px-4 py-3">
-        <EditChip active={editing} onClick={toggleEditing} />
         {REACTION_KINDS.map((k) => (
           <ChipButton
             key={k.id}
@@ -68,6 +67,7 @@ export function ReactionSubtab() {
             {k.label}
           </ChipButton>
         ))}
+        <EditChip active={editing} onClick={toggleEditing} />
       </div>
 
       <div className="px-4 pb-4">

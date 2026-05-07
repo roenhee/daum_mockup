@@ -58,7 +58,6 @@ export function RecentSubtab() {
   return (
     <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar relative">
       <div className="flex items-center gap-2 px-4 py-3">
-        <EditChip active={editing} onClick={toggleEditing} />
         <button
           type="button"
           onClick={handleSaveChipClick}
@@ -77,6 +76,7 @@ export function RecentSubtab() {
           />
           {saveOff ? '저장 기능 꺼짐' : '저장 기능 끄기'}
         </button>
+        <EditChip active={editing} onClick={toggleEditing} />
       </div>
 
       <ul className={cn(editing ? 'pb-0' : 'pb-4')}>

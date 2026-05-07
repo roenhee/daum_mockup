@@ -91,13 +91,13 @@ export function SavedSubtab() {
       <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar relative">
         <div className="relative flex items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-2">
-            <EditChip active={editing} onClick={toggleEditing} />
             <ChipButton
               active={Boolean(activeTag)}
               onClick={() => setTagListOpen(true)}
             >
               {activeTag ? `#${activeTag}` : '#태그목록'}
             </ChipButton>
+            <EditChip active={editing} onClick={toggleEditing} />
           </div>
           <div className="relative">
             <button

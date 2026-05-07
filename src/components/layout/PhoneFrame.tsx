@@ -18,7 +18,7 @@ export function PhoneFrame({ children }: PhoneFrameProps) {
         id="phone-frame-root"
         className={cn(
           'relative w-full h-dvh bg-white overflow-hidden',
-          'desktop:w-[390px] desktop:h-[845px] desktop:rounded-[44px] desktop:border-[8px] desktop:border-black desktop:shadow-2xl',
+          'desktop:w-[390px] desktop:h-[845px] desktop:rounded-[44px] desktop:border-[8px] desktop:border-black',
         )}
       >
         <div className="w-full h-full flex flex-col">

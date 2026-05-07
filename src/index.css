@@ -9,6 +9,12 @@ body,
   margin: 0;
 }
 
+html {
+  /* 모달이 body overflow 를 hidden 으로 잠글 때 스크롤바 사라지면서 화면이 밀리는
+     레이아웃 시프트 방지. 데스크탑 폰 프레임이 정중앙으로 유지된다. */
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo',
     'Noto Sans KR', sans-serif;

@@ -35,7 +35,6 @@ export function AiSuggestBubble({
 }: AiSuggestBubbleProps) {
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [show, setShow] = useState(false);
-  const [bubbleOpen, setBubbleOpen] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -56,8 +55,6 @@ export function AiSuggestBubble({
     setShow(false);
   };
 
-  const closeBubble = () => setBubbleOpen(false);
-
   return createPortal(
     <div
       // 하단 탭바(56px) 바로 위에 띄움. 우측 정렬, 말풍선은 버튼 왼쪽에 배치.
@@ -65,19 +62,18 @@ export function AiSuggestBubble({
       style={{ bottom: 72 }}
     >
       <div className="flex items-end justify-end gap-2">
-        {bubbleOpen ? (
-          <div
-            className={cn(
-              'pointer-events-auto flex-1 max-w-[260px] rounded-2xl rounded-br-sm bg-white border border-gray-200 shadow-xl px-3 py-3 transition-all duration-300 ease-out relative',
-              mounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-3',
-            )}
-            role="dialog"
-            aria-label="AI 키워드 구독 제안"
-          >
+        <div
+          className={cn(
+            'pointer-events-auto flex-1 max-w-[260px] rounded-2xl rounded-br-sm bg-white border border-gray-200 shadow-xl px-3 py-3 transition-all duration-300 ease-out relative',
+            mounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-3',
+          )}
+          role="dialog"
+          aria-label="AI 키워드 구독 제안"
+        >
             <button
               type="button"
               aria-label="제안 닫기"
-              onClick={closeBubble}
+              onClick={dismissAll}
               className="absolute top-1 right-1 p-1 text-gray-400 active:text-gray-600"
             >
               <X size={13} />
@@ -112,30 +108,22 @@ export function AiSuggestBubble({
               </div>
             </div>
             {/* 풍선 꼬리 — 오른쪽으로 향해 플로팅 버튼을 가리킴 */}
-            <span
-              className="absolute bottom-3 -right-1.5 w-3 h-3 bg-white border-t border-r border-gray-200 rotate-45"
-              aria-hidden
-            />
-          </div>
-        ) : null}
+          <span
+            className="absolute bottom-3 -right-1.5 w-3 h-3 bg-white border-t border-r border-gray-200 rotate-45"
+            aria-hidden
+          />
+        </div>
 
-        <button
-          type="button"
-          aria-label="AI 제안 다시 열기"
-          onClick={() => setBubbleOpen((v) => !v)}
+        <Link
+          to="/mai/news"
+          aria-label="M:AI 키워드 구독 시작"
+          onClick={dismissAll}
           className={cn(
             'pointer-events-auto relative w-12 h-12 shrink-0 rounded-full text-white flex items-center justify-center shadow-[0_8px_24px_rgba(30,131,255,0.35)] transition-transform active:scale-95',
             'bg-gradient-to-br from-[#5DA0FF] via-[#1E83FF] to-[#0357C4]',
           )}
         >
           <Sparkles size={20} strokeWidth={2.2} />
-          {!bubbleOpen ? (
-            <span
-              className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-daum-red border-2 border-white"
-              aria-hidden
-            />
-          ) : null}
-          <span className="sr-only">M:AI 제안</span>
           <span className="absolute inset-0 rounded-full ring-1 ring-white/40 pointer-events-none" />
           <Bell
             size={9}
@@ -143,7 +131,7 @@ export function AiSuggestBubble({
             className="absolute bottom-1.5 right-1.5 text-white/80"
             aria-hidden
           />
-        </button>
+        </Link>
       </div>
     </div>,
     target,

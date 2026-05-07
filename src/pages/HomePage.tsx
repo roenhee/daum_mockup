@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
+import { HomeSideMenu } from '@/components/sidemenu/HomeSideMenu';
 import { RealtimeTrend } from '@/components/home/RealtimeTrend';
 import { WidgetCarousel } from '@/components/home/WidgetCarousel';
 import { IssueSlot } from '@/components/home/IssueSlot';
@@ -25,6 +27,7 @@ function Gap() {
 }
 
 export function HomePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const issues = HOME_NEWS_FEED.slice(0, 4);
   const feedA = HOME_NEWS_FEED.slice(4, 7);
   const feedB = HOME_NEWS_FEED.slice(7, 11);
@@ -32,7 +35,12 @@ export function HomePage() {
   const feedD = HOME_NEWS_FEED.slice(15);
 
   return (
-    <AppShell variant="home" scrollableHeader>
+    <AppShell
+      variant="home"
+      scrollableHeader
+      onOpenMenu={() => setMenuOpen(true)}
+      fullOverlay={<HomeSideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />}
+    >
       <div className="bg-gray-100 flex flex-col">
         <RealtimeTrend trends={REALTIME_TRENDS} />
         <WidgetCarousel weather={HOME_WEATHER} kospi={KOSPI_SUMMARY} />

@@ -17,6 +17,7 @@ import { MaiSettingsDetailPage } from '@/pages/MaiSettingsDetailPage';
 import { NewsDetailPage } from '@/pages/NewsDetailPage';
 import { ChannelViewPage } from '@/pages/ChannelViewPage';
 import { SearchPage } from '@/pages/SearchPage';
+import { OsHomePage } from '@/pages/OsHomePage';
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/news/:id" element={<NewsDetailPage />} />
             <Route path="/channel/:id" element={<ChannelViewPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/os-home" element={<OsHomePage />} />
           </Routes>
         </PhoneFrame>
       </MaiPlayerProvider>

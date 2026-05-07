@@ -19,39 +19,50 @@ import { NewsDetailPage } from '@/pages/NewsDetailPage';
 import { ChannelViewPage } from '@/pages/ChannelViewPage';
 import { SearchPage } from '@/pages/SearchPage';
 import { OsHomePage } from '@/pages/OsHomePage';
+import { DeckViewerPage } from '@/pages/DeckViewerPage';
 
 export default function App() {
   return (
     <HashRouter>
-      <MaiPlayerProvider>
-        <PhoneFrame>
-          <PushNotificationProvider>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/contents" element={<Navigate to="/contents/news" replace />} />
-              <Route path="/contents/:subtab" element={<ContentsPage />} />
-              <Route path="/community" element={<CommunityPage />} />
-              <Route path="/shopping" element={<ShoppingPage />} />
-              <Route path="/mai" element={<Navigate to="/mai/news" replace />} />
-              <Route path="/mai/:subtab" element={<MaiPage />} />
-              <Route path="/mai-sub/:id" element={<MaiSubPage />} />
-              <Route path="/mai-history" element={<Navigate to="/mai-history/recent" replace />} />
-              <Route path="/mai-history/:tab" element={<MaiHistoryPage />} />
-              <Route path="/mai-subscribe" element={<Navigate to="/mai-subscribe/channels" replace />} />
-              <Route path="/mai-subscribe/:tab" element={<MaiSubscribePage />} />
-              <Route path="/mai-notification" element={<MaiNotificationPage />} />
-              <Route path="/mai-notification/order" element={<MaiNotificationOrderPage />} />
-              <Route path="/mai-notification/settings" element={<MaiNotificationSettingsPage />} />
-              <Route path="/mai-settings" element={<MaiSettingsPage />} />
-              <Route path="/mai-settings/:id" element={<MaiSettingsDetailPage />} />
-              <Route path="/news/:id" element={<NewsDetailPage />} />
-              <Route path="/channel/:id" element={<ChannelViewPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/os-home" element={<OsHomePage />} />
-            </Routes>
-          </PushNotificationProvider>
-        </PhoneFrame>
-      </MaiPlayerProvider>
+      <Routes>
+        {/* Deck 뷰는 사용자 해상도 풀스크린으로 노출 — 폰 프레임 우회 */}
+        <Route path="/deck" element={<DeckViewerPage />} />
+        <Route path="/*" element={<MockupApp />} />
+      </Routes>
     </HashRouter>
+  );
+}
+
+function MockupApp() {
+  return (
+    <MaiPlayerProvider>
+      <PhoneFrame>
+        <PushNotificationProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/contents" element={<Navigate to="/contents/news" replace />} />
+            <Route path="/contents/:subtab" element={<ContentsPage />} />
+            <Route path="/community" element={<CommunityPage />} />
+            <Route path="/shopping" element={<ShoppingPage />} />
+            <Route path="/mai" element={<Navigate to="/mai/news" replace />} />
+            <Route path="/mai/:subtab" element={<MaiPage />} />
+            <Route path="/mai-sub/:id" element={<MaiSubPage />} />
+            <Route path="/mai-history" element={<Navigate to="/mai-history/recent" replace />} />
+            <Route path="/mai-history/:tab" element={<MaiHistoryPage />} />
+            <Route path="/mai-subscribe" element={<Navigate to="/mai-subscribe/channels" replace />} />
+            <Route path="/mai-subscribe/:tab" element={<MaiSubscribePage />} />
+            <Route path="/mai-notification" element={<MaiNotificationPage />} />
+            <Route path="/mai-notification/order" element={<MaiNotificationOrderPage />} />
+            <Route path="/mai-notification/settings" element={<MaiNotificationSettingsPage />} />
+            <Route path="/mai-settings" element={<MaiSettingsPage />} />
+            <Route path="/mai-settings/:id" element={<MaiSettingsDetailPage />} />
+            <Route path="/news/:id" element={<NewsDetailPage />} />
+            <Route path="/channel/:id" element={<ChannelViewPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/os-home" element={<OsHomePage />} />
+          </Routes>
+        </PushNotificationProvider>
+      </PhoneFrame>
+    </MaiPlayerProvider>
   );
 }

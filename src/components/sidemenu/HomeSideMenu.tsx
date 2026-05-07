@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ExternalLink, Home, X } from 'lucide-react';
-import { openDeck } from '@/lib/deckLink';
+import { DECK_PATH } from '@/lib/deckLink';
 
 interface HomeSideMenuProps {
   open: boolean;
@@ -29,8 +29,8 @@ export function HomeSideMenu({ open, onClose }: HomeSideMenuProps) {
   if (!target || !open) return null;
 
   const handleDeck = () => {
-    openDeck();
     onClose();
+    navigate(DECK_PATH);
   };
 
   const handleOsHome = () => {

@@ -23,7 +23,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { asset } from '@/lib/asset';
-import { openDeck } from '@/lib/deckLink';
+import { DECK_PATH } from '@/lib/deckLink';
 import { usePushNotification } from '@/components/notification/PushNotificationProvider';
 import { cn } from '@/lib/cn';
 
@@ -148,7 +148,7 @@ const APPS: AppDef[] = [
     Icon: Presentation,
     bg: 'bg-gradient-to-b from-[#9F7AEA] to-[#6B46C1]',
     iconColor: 'text-white',
-    onClick: openDeck,
+    to: DECK_PATH,
   },
   {
     label: 'Daum',

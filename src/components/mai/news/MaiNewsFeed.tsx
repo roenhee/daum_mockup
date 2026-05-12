@@ -219,7 +219,7 @@ export function MaiNewsFeed() {
                 <section>
                   {g.items.map((pair, ii) => (
                     <Fragment key={`s-${pair.idx}`}>
-                      <div className="relative">
+                      <div className="relative" data-card-kind={pair.item.kind}>
                         <SlotStatus
                           read={isRead(pair.idx)}
                           onToggle={() => toggleRead(pair.idx)}
@@ -239,7 +239,7 @@ export function MaiNewsFeed() {
             return (
               <Fragment key={`g-${gi}`}>
                 {showSeparator ? <SlotSeparator /> : null}
-                <div className="relative">
+                <div className="relative" data-card-kind={g.item.kind}>
                   <SlotStatus
                     read={isRead(g.idx)}
                     onToggle={() => toggleRead(g.idx)}
@@ -253,7 +253,7 @@ export function MaiNewsFeed() {
           return (
             <Fragment key={`g-${gi}`}>
               {showSeparator ? <SlotSeparator /> : null}
-              <div className="relative px-3 py-3">
+              <div className="relative px-3 py-3" data-card-kind={g.item.kind}>
                 {!hideStatus ? (
                   <SlotStatus
                     read={isRead(g.idx)}

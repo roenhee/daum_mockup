@@ -4,6 +4,62 @@
 
 ---
 
+## 0. Axiom 도구 작업 규칙
+
+axiom — 살아있는 기획서 뷰어 — 도구는 main 안에 함께 산다. 일반 §1~§13 규칙은 모두 유효하되, 추가 규칙:
+
+### 0-1. 호칭
+
+- **"엑시움(axiom)"**: axiom 도구 자체. 범위는 `src/axiom/**`, `axiom.config.ts`,
+  `docs/projects/**/`, `vite.config.ts` 의 axiom-git-log 미들웨어, `src/index.css`
+  의 `.axiom-*` 클래스, M:AI 컴포넌트의 `<SpecAnchor>` 래핑·`data-card-kind` 어트리뷰트.
+  사용자가 "엑시움" 으로 요청하면 위 범위만 수정.
+- **"목업"**: Daum 앱 시뮬레이션 React 코드 (홈/콘텐츠/M:AI/뉴스 상세 등 일반
+  페이지·컴포넌트). 사용자가 "목업" 으로 요청하면 axiom 측은 건드리지 않는다.
+
+### 0-2. 목업 변경 시 axiom 영향
+
+axiom 가운데 pane은 iframe으로 같은 앱을 임베드하므로, 목업 수정은 자동 반영된다.
+별도 작업이 필요한 경우는 다음 셋:
+
+- M:AI 탭에 **새 섹션** 추가 + axiom 호버 연동이 필요 → `<SpecAnchor id="...">` 부착
+  + `docs/projects/mai/prd/main.md` 에 매칭 헤딩 `{#id}` 추가
+- 새 **카드 종류** 추가 + axiom 스크롤 자동 전환이 필요 → MaiNewsFeed wrapper 에
+  `data-card-kind` 부여 + `docs/projects/mai/docs/<kind>.md` 작성 + `axiom.config.ts`
+  의 `docs[]` 에 등록 (필요 시 `normalizeCardKind` 패밀리 규칙 확장)
+- 위 자료가 가리키던 코드를 **삭제** → axiom 쪽 자료(SpecAnchor, PRD 섹션, config 항목)도 함께 정리
+
+일반적인 스타일·문구·로직 수정은 axiom 쪽 손볼 필요 없음.
+
+### 0-3. 목업과 문서를 함께 수정한다 (axiom 자체 변경 시)
+
+axiom 도구 자체를 수정하는 작업이라도, 그 결과로 PRD·정책·deck 등 문서 의미가
+바뀌면 같은 PR에서 함께 갱신한다. 헤딩의 `{#anchor-id}` 보존 — 텍스트만 바꾸고
+ID를 잃으면 호버 연동이 끊긴다.
+
+- M:AI 메인 PRD: `docs/projects/mai/prd/main.md`
+- M:AI 정책: `docs/projects/mai/prd/policy.md`
+- M:AI 컨셉 deck (링크 wrapper): `docs/projects/mai/prd/deck.md`
+- M:AI 카드 종류별 스펙: `docs/projects/mai/docs/<kind>.md`
+- 홈탭 PRD: `docs/projects/home/prd.md` (다음 사이클에 본격 작성)
+
+### 0-4. `<SpecAnchor>` 부착 가이드
+
+- 위치: `Page.tsx` 의 섹션 단위. 너무 작은 단위(개별 카드 1개) 로 박지 말 것 — ring outline 이 어색해진다.
+- 일반 모드(`/#/mai` 직접 접속) 에서는 SpecAnchor 가 자식만 패스스루하므로 영향 없음.
+- `data-card-kind` 는 카드 종류 단위로 부착 (피드 wrapper div 에서). 한 카드 인스턴스가 아니라 종류(kind) 가 단위.
+
+### 0-5. 새 axiom 프로젝트 추가
+
+새 기능 단위 (예: 콘텐츠 탭 = 별도 프로젝트) 를 axiom에 등록할 때:
+
+1. `axiom.config.ts` 에 entry 추가 (`id`, `name`, `mockupEntry`, `docs[]`, `links`).
+2. `docs/projects/<id>/prd/main.md` 생성 (헤딩에 `{#id}` 부착).
+3. `docs/projects/<id>/docs/` 에 필요한 컴포넌트·카드 스펙 추가.
+4. 해당 페이지·컴포넌트에 `<SpecAnchor>` 와 (피드라면) `data-card-kind` 적용.
+
+---
+
 ## 1. 프로젝트 정의
 
 **Daum 서비스 웹 목업 (Web-based mockup)**
@@ -123,10 +179,24 @@ html, body, #root {
 ## 5. 디렉토리 구조
 
 ```
+axiom.config.ts                 # axiom 프로젝트 메타 (id/docs/links 등록)
 src/
 ├── main.tsx                    # 엔트리
-├── App.tsx                     # 라우터 + PhoneFrame 래핑
-├── index.css                   # Tailwind 진입
+├── App.tsx                     # 최상위 라우터 — /axiom/* 외에는 MockupApp으로
+├── MockupApp.tsx               # 목업 라우터 + PhoneFrame 래핑 (main·axiom iframe 공유)
+├── index.css                   # Tailwind 진입 + .axiom-* 키프레임
+├── axiom/                      # axiom 도구 (3-pane 셸·SpecAnchor·CardScrollSpy 등)
+│   ├── AxiomShell.tsx
+│   ├── AxiomContext.tsx
+│   ├── AxiomHeader.tsx
+│   ├── FileTreePane.tsx
+│   ├── MockupPane.tsx          # iframe 으로 같은 앱 임베드
+│   ├── SpecPane.tsx            # react-markdown 기반 PRD 뷰어
+│   ├── SpecAnchor.tsx          # 목업 측 호버 앵커 (비-axiom 모드 패스스루)
+│   ├── CardScrollSpyEmbed.tsx  # iframe 안 스크롤 spy
+│   ├── useGitHistory.ts        # dev 미들웨어 호출 훅
+│   ├── docContent.ts           # docs/**/*.md 빌드타임 인라인
+│   └── types.ts
 ├── components/
 │   ├── layout/
 │   │   ├── PhoneFrame.tsx      # 데스크탑 폰 프레임 래퍼 ⭐ 핵심
@@ -170,6 +240,23 @@ src/
 │   └── ...
 └── types/
     └── index.ts                # 공용 타입 정의 (ContentArticle 등)
+
+docs/
+├── 01_daum_context.md          # 서비스 컨텍스트
+├── 02_daum_service_spec.md     # 화면별 스펙 (Ground Truth)
+├── mockup_plan.md              # 구현 계획
+├── ui_patterns.md              # 컴포넌트 명명·패턴
+└── projects/                   # axiom 프로젝트 별 문서
+    ├── mai/
+    │   ├── prd/
+    │   │   ├── main.md         # M:AI 메인 PRD
+    │   │   ├── policy.md       # 정책
+    │   │   └── deck.md         # 컨셉 deck 링크 wrapper
+    │   └── docs/               # 카드 종류별 스펙 (n1, n4, ... n20)
+    │       ├── n1-article.md
+    │       └── ...
+    └── home/                   # 다음 사이클부터 본격 작성
+        └── prd.md
 ```
 
 ---
@@ -190,6 +277,8 @@ React Router 기준, URL 구조는 Daum 앱의 탭 구조를 그대로 반영.
 | `/channel/:id` | 채널뷰 | §3-2 |
 | `/search` | 검색 결과 | §3-3 |
 | `/menu` | 사이드 메뉴 | §1 사이드 메뉴 |
+| `/deck` | 컨셉 deck 풀스크린 (PhoneFrame 우회) | — |
+| `/axiom/:projectId` | axiom 도구 진입 (PhoneFrame 우회, 자체 3-pane 셸) | — |
 
 **중요**: 상세 뷰(`/news/:id`, `/channel/:id`, `/search`)는 하단 탭 바 대신 인앱 브라우저 툴바가 고정된다. 02 문서 §1 "하단 고정 영역" 참조.
 

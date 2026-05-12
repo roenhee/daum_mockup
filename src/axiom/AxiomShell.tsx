@@ -65,8 +65,15 @@ export function AxiomShell() {
     if (!project) return;
     function onMessage(e: MessageEvent) {
       const data = e.data;
-      if (!data || data.type !== 'axiom:card-visible' || typeof data.kind !== 'string') return;
+      if (!data || data.type !== 'axiom:card-visible') return;
       if (Date.now() < suppressUntilRef.current) return;
+      // null = 뷰포트 중앙에 카드가 없음
+      // 활성 doc 이 카드 doc 일 때만 비운다 — PRD/정책 같은 일반 문서는 유지.
+      if (data.kind === null) {
+        setActiveDoc((prev) => (prev?.cardKind ? undefined : prev));
+        return;
+      }
+      if (typeof data.kind !== 'string') return;
       const normalized = normalizeCardKind(data.kind);
       const match = project!.docs.find((d) => d.cardKind === normalized);
       if (match) setActiveDoc(match);

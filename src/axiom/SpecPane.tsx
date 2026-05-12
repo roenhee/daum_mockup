@@ -45,9 +45,7 @@ export function SpecPane({ doc }: { doc: AxiomDoc | undefined }) {
 
   if (!doc) {
     return (
-      <section className="flex items-center justify-center rounded-lg border border-gray-200 bg-white text-[12px] text-gray-400">
-        No document selected.
-      </section>
+      <section className="h-full rounded-lg border border-gray-200 bg-white" />
     );
   }
 

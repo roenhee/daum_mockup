@@ -16,36 +16,36 @@ export function CardScrollSpyEmbed() {
     let scrollContainer: Element | null = null;
     let rafId: number | null = null;
 
-    function findClosestCardKind(): string | null {
+    /**
+     * 뷰포트 중앙 라인이 어떤 카드의 영역 안에 들어와 있는지 찾는다.
+     * - 어떤 카드의 top..bottom 사이에 중앙 라인이 있으면 그 카드가 정답.
+     * - 카드 사이의 비-카드 영역(프로필/게이트웨이 등)에 중앙이 있으면 null.
+     */
+    function findCentralCardKind(): string | null {
       const container = scrollContainer;
       if (!container) return null;
       const r = container.getBoundingClientRect();
       const centerY = r.top + r.height / 2;
       const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card-kind]'));
-      let bestKind: string | null = null;
-      let bestDist = Number.POSITIVE_INFINITY;
       for (const c of cards) {
         const kind = c.getAttribute('data-card-kind');
         if (!kind) continue;
         const cr = c.getBoundingClientRect();
-        const cardCenter = cr.top + cr.height / 2;
-        const dist = Math.abs(cardCenter - centerY);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestKind = kind;
-        }
+        if (cr.top <= centerY && cr.bottom >= centerY) return kind;
       }
-      return bestKind;
+      return null;
     }
 
     function handleScroll() {
       if (rafId !== null) return;
       rafId = window.requestAnimationFrame(() => {
         rafId = null;
-        const kind = findClosestCardKind();
-        if (kind && kind !== lastSent) {
-          lastSent = kind;
-          window.parent.postMessage({ type: 'axiom:card-visible', kind }, '*');
+        const result = findCentralCardKind();
+        // 중앙에 있는 카드가 없으면 null 송신 (우측 doc 비우기)
+        const next = result;
+        if (next !== lastSent) {
+          lastSent = next;
+          window.parent.postMessage({ type: 'axiom:card-visible', kind: next }, '*');
         }
       });
     }
@@ -104,10 +104,22 @@ export function CardScrollSpyEmbed() {
     };
     attach();
     window.addEventListener('message', onMessage);
+    // 라우트 전환 (탭 이동 등) 시 scroll 이벤트 없이도 카드 구성이 바뀌므로 보조 폴링
+    const detectInterval = window.setInterval(() => {
+      // scrollContainer 가 새로 마운트된 경우 재부착
+      const current = document.querySelector('main');
+      if (current && current !== scrollContainer) {
+        if (scrollContainer) scrollContainer.removeEventListener('scroll', handleScroll);
+        scrollContainer = current;
+        scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+      }
+      handleScroll();
+    }, 500);
 
     return () => {
       if (scrollContainer) scrollContainer.removeEventListener('scroll', handleScroll);
       window.removeEventListener('message', onMessage);
+      window.clearInterval(detectInterval);
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);

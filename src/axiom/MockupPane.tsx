@@ -1,8 +1,16 @@
-import { useEffect, useRef } from 'react';
-import { MapPin } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import type { AxiomDoc, AxiomProject } from './types';
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const PHONE_W = 406;
+const PHONE_H = 861;
+const BORDER = 8;
+
+interface BracketRect {
+  top: number; // phone-bezel 내부 좌표 (border 포함)
+  height: number;
+  cardKind: string;
+}
 
 export function MockupPane({
   project,
@@ -12,57 +20,100 @@ export function MockupPane({
   activeDoc: AxiomDoc | undefined;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [bracket, setBracket] = useState<BracketRect | null>(null);
   const src = `${BASE}/#${project.mockupEntry}`;
+  const kind = activeDoc?.cardKind;
 
-  // 프로젝트 전환 시 iframe을 강제로 새 entry로 리셋. src 변경만으로는
-  // HashRouter 내부 navigate가 일어나지 않을 수 있어 reload.
+  // 프로젝트 전환 시 iframe 리로드
   useEffect(() => {
     const win = iframeRef.current?.contentWindow;
     if (!win) return;
     try {
       win.location.replace(src);
     } catch {
-      // cross-origin이면 무시 (여기선 same-origin)
+      /* same-origin only */
     }
   }, [src]);
 
+  // 활성 cardKind 가 있을 때 iframe 내부 해당 카드 위치를 추적해 우측 박스로 표시
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !kind) {
+      setBracket(null);
+      return;
+    }
+
+    function update() {
+      const inner = iframe?.contentDocument;
+      if (!inner) {
+        setBracket(null);
+        return;
+      }
+      const target = inner.querySelector<HTMLElement>(
+        `[data-card-kind="${CSS.escape(kind!)}"]`,
+      );
+      if (!target) {
+        setBracket(null);
+        return;
+      }
+      const rect = target.getBoundingClientRect();
+      // 폰 뷰포트 0~PHONE_H 범위에 클램프
+      const innerTop = Math.max(0, rect.top);
+      const innerBottom = Math.min(PHONE_H - BORDER * 2, rect.bottom);
+      if (innerBottom <= innerTop) {
+        setBracket(null);
+        return;
+      }
+      setBracket({
+        top: BORDER + innerTop,
+        height: innerBottom - innerTop,
+        cardKind: kind!,
+      });
+    }
+
+    update();
+    const win = iframe.contentWindow;
+    const main = win?.document.querySelector('main');
+    main?.addEventListener('scroll', update, { passive: true });
+    // 라우트 전환 등으로 DOM 이 바뀌는 경우를 위해 짧은 폴링 (저비용)
+    const interval = window.setInterval(update, 250);
+    return () => {
+      main?.removeEventListener('scroll', update);
+      window.clearInterval(interval);
+    };
+  }, [kind, src]);
+
   return (
-    <section className="h-full overflow-hidden flex flex-col items-center justify-center gap-3 rounded-lg border border-gray-200 bg-gray-100 px-3 py-4">
-      <SlotIndicator doc={activeDoc} />
-      {/* 외곽 베젤 406×861 = 내부 iframe 영역 정확히 390×845 (border-box, 8px 베젤 양쪽). */}
-      <div className="relative w-[406px] h-[861px] rounded-[44px] border-[8px] border-black overflow-hidden bg-white shrink-0">
-        <iframe
-          ref={iframeRef}
-          src={src}
-          title={`mockup-${project.id}`}
-          data-axiom-mockup="true"
-          className="w-full h-full border-0 block"
-        />
+    <section className="h-full overflow-hidden flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 px-3 py-4">
+      <div className="relative" style={{ width: PHONE_W, height: PHONE_H }}>
+        <div
+          className="relative bg-white overflow-hidden rounded-[44px] border-[8px] border-black"
+          style={{ width: PHONE_W, height: PHONE_H }}
+        >
+          <iframe
+            ref={iframeRef}
+            src={src}
+            title={`mockup-${project.id}`}
+            data-axiom-mockup="true"
+            className="w-full h-full border-0 block"
+          />
+        </div>
+        {bracket ? (
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: PHONE_W + 6,
+              top: bracket.top,
+              height: bracket.height,
+            }}
+          >
+            <div className="h-full w-[14px] rounded-r-md border-2 border-blue-400 border-l-0 bg-blue-100/40" />
+            <div className="absolute top-1/2 -translate-y-1/2 left-[18px] whitespace-nowrap px-2 py-0.5 rounded bg-blue-500 text-white text-[10px] font-medium shadow">
+              {activeDoc?.label ?? bracket.cardKind}
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
-  );
-}
-
-function SlotIndicator({ doc }: { doc: AxiomDoc | undefined }) {
-  if (!doc) {
-    return <div className="h-7" aria-hidden />;
-  }
-  const isCard = !!doc.cardKind;
-  return (
-    <div
-      className={
-        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] transition-colors ' +
-        (isCard
-          ? 'border-blue-200 bg-blue-50 text-blue-800'
-          : 'border-gray-200 bg-white text-gray-700')
-      }
-      title="현재 우측 spec 문서가 가리키는 slot"
-    >
-      <MapPin size={12} className={isCard ? 'text-blue-500' : 'text-gray-400'} />
-      <span className="text-[10px] uppercase tracking-wide opacity-70">
-        {isCard ? '카드 slot' : '문서'}
-      </span>
-      <span className="font-medium">{doc.label}</span>
-    </div>
   );
 }

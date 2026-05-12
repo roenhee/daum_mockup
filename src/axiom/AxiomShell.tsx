@@ -20,13 +20,25 @@ function inferRouteForCardKind(kind: string): string | undefined {
   return undefined;
 }
 
+// 가운데 컬럼 최소: 폰 프레임 외곽(406px) + 양옆 여백.
+const LEFT_MIN = 200;
+const LEFT_MAX = 420;
+const CENTER_MIN = 430;
+const CENTER_MAX = 720;
+const DEFAULT_LEFT = 260;
+const DEFAULT_CENTER = 460;
+
 export function AxiomShell() {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projectId ? findProject(projectId) : undefined;
   const initialDoc = project?.docs.find((d) => d.primary) ?? project?.docs[0];
   const [activeDoc, setActiveDoc] = useState<AxiomDoc | undefined>(initialDoc);
-  // 자동 전환 무시 deadline (ms timestamp). 0 이면 활성 상태.
   const suppressUntilRef = useRef(0);
+
+  // 패널 너비 (드래그로 조정)
+  const [leftW, setLeftW] = useState<number>(DEFAULT_LEFT);
+  const [centerW, setCenterW] = useState<number>(DEFAULT_CENTER);
+  const [dragging, setDragging] = useState<null | 'left' | 'center'>(null);
 
   useEffect(() => {
     if (project) {
@@ -35,43 +47,60 @@ export function AxiomShell() {
   }, [project]);
 
   // 사용자가 트리에서 문서를 클릭했을 때.
-  // cardKind 가 있으면 iframe 에도 (라우트 전환 + 스크롤) 명령을 보낸다.
-  const selectDoc = useCallback(
-    (doc: AxiomDoc) => {
-      setActiveDoc(doc);
-      if (doc.cardKind) {
-        const iframe = document.querySelector<HTMLIFrameElement>(
-          'iframe[data-axiom-mockup]',
-        );
-        const route = inferRouteForCardKind(doc.cardKind);
-        iframe?.contentWindow?.postMessage(
-          { type: 'axiom:goto-card', kind: doc.cardKind, route },
-          '*',
-        );
-        suppressUntilRef.current = Date.now() + CARD_AUTO_SWITCH_SUPPRESS_MS;
-      }
-    },
-    [],
-  );
+  const selectDoc = useCallback((doc: AxiomDoc) => {
+    setActiveDoc(doc);
+    if (doc.cardKind) {
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe[data-axiom-mockup]');
+      const route = inferRouteForCardKind(doc.cardKind);
+      iframe?.contentWindow?.postMessage(
+        { type: 'axiom:goto-card', kind: doc.cardKind, route },
+        '*',
+      );
+      suppressUntilRef.current = Date.now() + CARD_AUTO_SWITCH_SUPPRESS_MS;
+    }
+  }, []);
 
   // iframe 스크롤 → card-visible 자동 수신해 문서 자동 전환
   useEffect(() => {
     if (!project) return;
     function onMessage(e: MessageEvent) {
       const data = e.data;
-      if (!data || data.type !== 'axiom:card-visible' || typeof data.kind !== 'string') {
-        return;
-      }
+      if (!data || data.type !== 'axiom:card-visible' || typeof data.kind !== 'string') return;
       if (Date.now() < suppressUntilRef.current) return;
       const normalized = normalizeCardKind(data.kind);
       const match = project!.docs.find((d) => d.cardKind === normalized);
-      if (match) {
-        setActiveDoc(match);
-      }
+      if (match) setActiveDoc(match);
     }
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
   }, [project]);
+
+  // 드래그 핸들 mousedown 처리
+  const onStartDrag = useCallback(
+    (target: 'left' | 'center') => (e: React.MouseEvent) => {
+      e.preventDefault();
+      setDragging(target);
+      const startX = e.clientX;
+      const startLeft = leftW;
+      const startCenter = centerW;
+      function move(ev: MouseEvent) {
+        const dx = ev.clientX - startX;
+        if (target === 'left') {
+          setLeftW(clamp(startLeft + dx, LEFT_MIN, LEFT_MAX));
+        } else {
+          setCenterW(clamp(startCenter + dx, CENTER_MIN, CENTER_MAX));
+        }
+      }
+      function up() {
+        setDragging(null);
+        window.removeEventListener('mousemove', move);
+        window.removeEventListener('mouseup', up);
+      }
+      window.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', up);
+    },
+    [leftW, centerW],
+  );
 
   if (!projectId || !project) {
     return <Navigate to={`/axiom/${projects[0]?.id ?? 'mai'}`} replace />;
@@ -81,12 +110,59 @@ export function AxiomShell() {
     <AxiomProvider projectId={project.id}>
       <div className="flex flex-col h-dvh bg-gray-50 text-gray-900">
         <AxiomHeader project={project} />
-        <div className="flex-1 min-h-0 grid grid-cols-[260px_440px_minmax(0,1fr)] gap-3 p-3">
-          <FileTreePane project={project} activeDoc={activeDoc} onSelect={selectDoc} />
-          <MockupPane project={project} activeDoc={activeDoc} />
-          <SpecPane doc={activeDoc} />
+        <div className="relative flex-1 min-h-0 flex p-3 gap-0">
+          <div style={{ width: leftW }} className="min-w-0 shrink-0">
+            <FileTreePane project={project} activeDoc={activeDoc} onSelect={selectDoc} />
+          </div>
+          <ResizeHandle onMouseDown={onStartDrag('left')} active={dragging === 'left'} />
+          <div style={{ width: centerW }} className="min-w-0 shrink-0">
+            <MockupPane project={project} activeDoc={activeDoc} />
+          </div>
+          <ResizeHandle onMouseDown={onStartDrag('center')} active={dragging === 'center'} />
+          <div className="flex-1 min-w-0">
+            <SpecPane doc={activeDoc} />
+          </div>
+          {/* 드래그 중에는 iframe 이 마우스 이벤트를 가로채지 않도록 오버레이 */}
+          {dragging ? (
+            <div
+              className="absolute inset-0 z-50"
+              style={{ cursor: 'col-resize' }}
+              aria-hidden
+            />
+          ) : null}
         </div>
       </div>
     </AxiomProvider>
   );
+}
+
+function ResizeHandle({
+  onMouseDown,
+  active,
+}: {
+  onMouseDown: (e: React.MouseEvent) => void;
+  active: boolean;
+}) {
+  return (
+    <div
+      role="separator"
+      aria-orientation="vertical"
+      onMouseDown={onMouseDown}
+      className={
+        'group relative w-3 shrink-0 cursor-col-resize flex items-center justify-center ' +
+        (active ? 'bg-blue-50' : '')
+      }
+    >
+      <div
+        className={
+          'h-12 w-[3px] rounded-full transition-colors ' +
+          (active ? 'bg-blue-400' : 'bg-gray-200 group-hover:bg-gray-400')
+        }
+      />
+    </div>
+  );
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.max(lo, Math.min(hi, v));
 }

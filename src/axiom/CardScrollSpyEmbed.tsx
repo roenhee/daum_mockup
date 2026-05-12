@@ -50,16 +50,43 @@ export function CardScrollSpyEmbed() {
       });
     }
 
-    function onMessage(e: MessageEvent) {
-      const data = e.data;
-      if (!data || data.type !== 'axiom:scroll-to-card' || typeof data.kind !== 'string') return;
+    function flashScroll(kind: string): boolean {
       const target = document.querySelector<HTMLElement>(
-        `[data-card-kind="${CSS.escape(data.kind)}"]`,
+        `[data-card-kind="${CSS.escape(kind)}"]`,
       );
-      if (!target) return;
+      if (!target) return false;
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       target.classList.add('axiom-card-flash');
       window.setTimeout(() => target.classList.remove('axiom-card-flash'), 1500);
+      return true;
+    }
+
+    function pollScroll(kind: string, attempts = 0) {
+      if (flashScroll(kind)) return;
+      if (attempts < 20) {
+        window.setTimeout(() => pollScroll(kind, attempts + 1), 80);
+      }
+    }
+
+    function onMessage(e: MessageEvent) {
+      const data = e.data;
+      if (!data || typeof data.kind !== 'string') return;
+      // 단순 스크롤만
+      if (data.type === 'axiom:scroll-to-card') {
+        flashScroll(data.kind);
+        return;
+      }
+      // 다른 라우트에 있는 카드로 가는 경우: 먼저 라우트 변경 후 폴링.
+      if (data.type === 'axiom:goto-card') {
+        const wantedHash = typeof data.route === 'string' ? `#${data.route}` : '';
+        if (wantedHash && window.location.hash !== wantedHash) {
+          window.location.hash = data.route;
+          // React Router 가 새 페이지 마운트할 시간을 주고 폴링
+          window.requestAnimationFrame(() => pollScroll(data.kind, 0));
+        } else {
+          flashScroll(data.kind);
+        }
+      }
     }
 
     // 스크롤 컨테이너 부착 (AppShell이 마운트되기 전일 수 있어 폴링)

@@ -13,6 +13,13 @@ import { SpecPane } from './SpecPane';
 // 흔드는 echo 를 막기 위해 잠시 동안 자동 전환을 멈춘다.
 const CARD_AUTO_SWITCH_SUPPRESS_MS = 1500;
 
+/** cardKind 의 prefix 로 어느 mockup 라우트에 사는 카드인지 추론. */
+function inferRouteForCardKind(kind: string): string | undefined {
+  if (kind.startsWith('i')) return '/mai/issue';
+  if (kind.startsWith('n')) return '/mai/news';
+  return undefined;
+}
+
 export function AxiomShell() {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projectId ? findProject(projectId) : undefined;
@@ -28,7 +35,7 @@ export function AxiomShell() {
   }, [project]);
 
   // 사용자가 트리에서 문서를 클릭했을 때.
-  // cardKind 가 있으면 iframe 에도 스크롤 명령을 보낸다.
+  // cardKind 가 있으면 iframe 에도 (라우트 전환 + 스크롤) 명령을 보낸다.
   const selectDoc = useCallback(
     (doc: AxiomDoc) => {
       setActiveDoc(doc);
@@ -36,8 +43,9 @@ export function AxiomShell() {
         const iframe = document.querySelector<HTMLIFrameElement>(
           'iframe[data-axiom-mockup]',
         );
+        const route = inferRouteForCardKind(doc.cardKind);
         iframe?.contentWindow?.postMessage(
-          { type: 'axiom:scroll-to-card', kind: doc.cardKind },
+          { type: 'axiom:goto-card', kind: doc.cardKind, route },
           '*',
         );
         suppressUntilRef.current = Date.now() + CARD_AUTO_SWITCH_SUPPRESS_MS;
@@ -73,9 +81,9 @@ export function AxiomShell() {
     <AxiomProvider projectId={project.id}>
       <div className="flex flex-col h-dvh bg-gray-50 text-gray-900">
         <AxiomHeader project={project} />
-        <div className="flex-1 min-h-0 grid grid-cols-[260px_minmax(420px,1fr)_minmax(0,1fr)] gap-3 p-3">
+        <div className="flex-1 min-h-0 grid grid-cols-[260px_440px_minmax(0,1fr)] gap-3 p-3">
           <FileTreePane project={project} activeDoc={activeDoc} onSelect={selectDoc} />
-          <MockupPane project={project} />
+          <MockupPane project={project} activeDoc={activeDoc} />
           <SpecPane doc={activeDoc} />
         </div>
       </div>

@@ -54,7 +54,7 @@ export function SpecPane({ doc }: { doc: AxiomDoc | undefined }) {
   // HTML 문서는 iframe 으로 임베드 (컨셉 deck 등).
   if (isHtmlDoc(doc)) {
     return (
-      <section className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <section className="h-full flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
         <div className="border-b border-gray-100 px-6 py-3 shrink-0">
           <div className="text-[11px] uppercase tracking-wide text-gray-400">Doc · HTML</div>
           <div className="text-[14px] font-semibold text-gray-900">{doc.label}</div>
@@ -72,14 +72,14 @@ export function SpecPane({ doc }: { doc: AxiomDoc | undefined }) {
   const content = loadDoc(doc.path);
   if (!content) {
     return (
-      <section className="overflow-y-auto rounded-lg border border-gray-200 bg-white p-6 text-[12px] text-gray-500">
+      <section className="h-full overflow-y-auto rounded-lg border border-gray-200 bg-white p-6 text-[12px] text-gray-500">
         파일을 찾지 못함: <code>{doc.path}</code>
       </section>
     );
   }
 
   return (
-    <section className="overflow-y-auto rounded-lg border border-gray-200 bg-white">
+    <section className="h-full overflow-y-auto rounded-lg border border-gray-200 bg-white">
       <div className="border-b border-gray-100 px-6 py-3">
         <div className="text-[11px] uppercase tracking-wide text-gray-400">Doc</div>
         <div className="text-[14px] font-semibold text-gray-900">{doc.label}</div>

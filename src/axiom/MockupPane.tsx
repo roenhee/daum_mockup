@@ -27,9 +27,10 @@ export function MockupPane({
   }, [src]);
 
   return (
-    <section className="overflow-hidden flex flex-col items-center justify-center gap-3 rounded-lg border border-gray-200 bg-gray-100 px-3 py-4">
+    <section className="h-full overflow-hidden flex flex-col items-center justify-center gap-3 rounded-lg border border-gray-200 bg-gray-100 px-3 py-4">
       <SlotIndicator doc={activeDoc} />
-      <div className="relative w-[390px] h-[845px] rounded-[44px] border-[8px] border-black overflow-hidden bg-white shrink-0">
+      {/* 외곽 베젤 406×861 = 내부 iframe 영역 정확히 390×845 (border-box, 8px 베젤 양쪽). */}
+      <div className="relative w-[406px] h-[861px] rounded-[44px] border-[8px] border-black overflow-hidden bg-white shrink-0">
         <iframe
           ref={iframeRef}
           src={src}

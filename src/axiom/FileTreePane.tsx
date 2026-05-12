@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { ChevronDown, FileText, Folder } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ChevronDown, ChevronRight, FileText, Folder, FolderOpen } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { getProjectBasePath } from '../../axiom.config';
 import type { AxiomDoc, AxiomProject } from './types';
@@ -25,7 +25,7 @@ export function FileTreePane({ project, activeDoc, onSelect }: FileTreePaneProps
   const tree = useMemo(() => buildTree(project), [project]);
 
   return (
-    <aside className="overflow-y-auto rounded-lg border border-gray-200 bg-white">
+    <aside className="h-full overflow-y-auto rounded-lg border border-gray-200 bg-white">
       <div className="px-3 py-2 border-b border-gray-100">
         <div className="text-[11px] uppercase tracking-wide text-gray-500">Project</div>
         <div className="text-[13px] font-semibold text-gray-900 truncate">{project.name}</div>
@@ -68,27 +68,55 @@ function TreeRow({
   if (node.type === 'file') {
     return <FileRow depth={depth} doc={node.doc} active={activeDoc?.path === node.doc.path} onSelect={onSelect} />;
   }
+  return <FolderRow node={node} depth={depth} activeDoc={activeDoc} onSelect={onSelect} />;
+}
+
+function FolderRow({
+  node,
+  depth,
+  activeDoc,
+  onSelect,
+}: {
+  node: FolderNode;
+  depth: number;
+  activeDoc: AxiomDoc | undefined;
+  onSelect: (doc: AxiomDoc) => void;
+}) {
+  const [open, setOpen] = useState(true);
   return (
     <li>
-      <div
-        className="flex items-center gap-1.5 py-1 text-[11.5px] font-semibold text-gray-600"
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
         style={{ paddingLeft: 12 + depth * 12 }}
+        className="w-full text-left flex items-center gap-1.5 py-1 pr-3 text-[11.5px] font-semibold text-gray-600 hover:bg-gray-50"
       >
-        <ChevronDown size={12} className="text-gray-400" />
-        <Folder size={13} className="text-gray-400" />
+        {open ? (
+          <ChevronDown size={12} className="text-gray-400 shrink-0" />
+        ) : (
+          <ChevronRight size={12} className="text-gray-400 shrink-0" />
+        )}
+        {open ? (
+          <FolderOpen size={13} className="text-gray-400 shrink-0" />
+        ) : (
+          <Folder size={13} className="text-gray-400 shrink-0" />
+        )}
         <span>{node.name}/</span>
-      </div>
-      <ul>
-        {node.children.map((c, i) => (
-          <TreeRow
-            key={nodeKey(c, i)}
-            node={c}
-            depth={depth + 1}
-            activeDoc={activeDoc}
-            onSelect={onSelect}
-          />
-        ))}
-      </ul>
+      </button>
+      {open ? (
+        <ul>
+          {node.children.map((c, i) => (
+            <TreeRow
+              key={nodeKey(c, i)}
+              node={c}
+              depth={depth + 1}
+              activeDoc={activeDoc}
+              onSelect={onSelect}
+            />
+          ))}
+        </ul>
+      ) : null}
     </li>
   );
 }
@@ -127,7 +155,6 @@ function FileRow({
 function buildTree(project: AxiomProject): TreeNode[] {
   const base = getProjectBasePath(project.id);
   const rootChildren: TreeNode[] = [];
-  // folderName → FolderNode 캐시 (해당 depth 의 부모 노드 단위로 키 구분 안 해도 — 같은 path 구조라 충돌 없음)
   const folderCache = new Map<string, FolderNode>();
 
   function getFolder(absKey: string, parts: string[]): FolderNode {
@@ -135,7 +162,6 @@ function buildTree(project: AxiomProject): TreeNode[] {
     if (cached) return cached;
     cached = { type: 'folder', name: parts[parts.length - 1], children: [] };
     folderCache.set(absKey, cached);
-    // 부모에 등록
     if (parts.length === 1) {
       rootChildren.push(cached);
     } else {
@@ -151,14 +177,13 @@ function buildTree(project: AxiomProject): TreeNode[] {
     if (doc.path.startsWith(base)) {
       const rel = doc.path.slice(base.length);
       const segs = rel.split('/');
-      folderParts = segs.slice(0, -1); // 마지막은 파일명
+      folderParts = segs.slice(0, -1);
     }
 
     if (folderParts.length === 0) {
       rootChildren.push({ type: 'file', doc });
       continue;
     }
-    // 폴더 트리 보장
     for (let i = 1; i <= folderParts.length; i++) {
       getFolder(folderParts.slice(0, i).join('/'), folderParts.slice(0, i));
     }
@@ -167,11 +192,11 @@ function buildTree(project: AxiomProject): TreeNode[] {
     if (leafFolder) leafFolder.children.push({ type: 'file', doc });
   }
 
-  // 정렬: 루트에서 prd → docs → 그 외 알파벳; 같은 레벨 폴더끼리도 동일 규칙
+  // 정렬: prd → docs → 새소식 → 이슈노트 우선, 그 외는 알파벳
   const folderOrder = ['prd', 'docs', '새소식', '이슈노트'];
   const sortNodes = (nodes: TreeNode[]) => {
     nodes.sort((a, b) => {
-      if (a.type !== b.type) return a.type === 'file' ? -1 : 1; // 파일 먼저 (루트 직속)
+      if (a.type !== b.type) return a.type === 'file' ? -1 : 1;
       if (a.type === 'folder' && b.type === 'folder') {
         const ai = folderOrder.indexOf(a.name);
         const bi = folderOrder.indexOf(b.name);

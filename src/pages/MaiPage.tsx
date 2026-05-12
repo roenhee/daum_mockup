@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { SubTabBar } from '@/components/ui/SubTabBar';
+import { SpecAnchor } from '@/axiom/SpecAnchor';
 import { MAI_GATEWAYS, MAI_PROFILE, MAI_SUBTABS } from '@/mocks/mai';
 import { MaiNewsFeed } from '@/components/mai/news/MaiNewsFeed';
 import { MaiIssueFeed } from '@/components/mai/issue/IssueNoteFeed';
@@ -24,10 +25,12 @@ export function MaiPage() {
           fullOverlay={<MaiExploreFullOverlay />}
         >
           <div className="flex flex-col bg-white">
-            <ProfileSection />
-            <GatewayRow />
-            <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
-            <MaiExploreFeed />
+            <SpecAnchor id="mai-profile-header"><ProfileSection /></SpecAnchor>
+            <SpecAnchor id="mai-gateway-row"><GatewayRow /></SpecAnchor>
+            <SpecAnchor id="mai-subtab-bar">
+              <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
+            </SpecAnchor>
+            <SpecAnchor id="mai-explore-feed"><MaiExploreFeed /></SpecAnchor>
           </div>
         </AppShell>
       </ExploreProvider>
@@ -37,9 +40,11 @@ export function MaiPage() {
   return (
     <AppShell variant="mai">
       <div className="flex flex-col bg-white">
-        <ProfileSection />
-        <GatewayRow />
-        <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
+        <SpecAnchor id="mai-profile-header"><ProfileSection /></SpecAnchor>
+        <SpecAnchor id="mai-gateway-row"><GatewayRow /></SpecAnchor>
+        <SpecAnchor id="mai-subtab-bar">
+          <SubTabBar tabs={MAI_SUBTABS} className="sticky top-0 z-20" />
+        </SpecAnchor>
         <SubtabBody id={subtab} />
       </div>
     </AppShell>
@@ -93,8 +98,8 @@ function GatewayRow() {
 }
 
 function SubtabBody({ id }: { id: string }) {
-  if (id === 'news') return <MaiNewsFeed />;
-  if (id === 'issue') return <MaiIssueFeed />;
+  if (id === 'news') return <SpecAnchor id="mai-news-feed"><MaiNewsFeed /></SpecAnchor>;
+  if (id === 'issue') return <SpecAnchor id="mai-issue-feed"><MaiIssueFeed /></SpecAnchor>;
   const label = MAI_SUBTABS.find((t) => t.id === id)?.label ?? id;
   return (
     <section className="bg-white flex-1 min-h-[400px] flex items-center justify-center px-6">

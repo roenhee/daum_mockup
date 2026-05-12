@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, ExternalLink, Home, X } from 'lucide-react';
+import { ChevronRight, ExternalLink, Home, Layers, X } from 'lucide-react';
 import { DECK_PATH } from '@/lib/deckLink';
+
+// axiom 진입은 이미 axiom shell 안 iframe에서 메뉴를 열었을 때는 의미가 없으므로
+// 그 경우 메뉴 항목을 숨긴다.
+const isInAxiomShell =
+  typeof window !== 'undefined' && window.parent !== window;
 
 interface HomeSideMenuProps {
   open: boolean;
@@ -36,6 +41,11 @@ export function HomeSideMenu({ open, onClose }: HomeSideMenuProps) {
   const handleOsHome = () => {
     onClose();
     navigate('/os-home');
+  };
+
+  const handleAxiom = () => {
+    onClose();
+    navigate('/axiom/mai');
   };
 
   return createPortal(
@@ -72,6 +82,15 @@ export function HomeSideMenu({ open, onClose }: HomeSideMenuProps) {
           onClick={handleDeck}
           trailing="external"
         />
+        {isInAxiomShell ? null : (
+          <MenuButton
+            icon={<Layers size={22} className="text-gray-800" />}
+            label="엑시움 프로젝트 가기"
+            sub="목업 옆에 PRD·정책·카드 스펙을 함께 보는 도구"
+            onClick={handleAxiom}
+            trailing="next"
+          />
+        )}
       </div>
     </div>,
     target,

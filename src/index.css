@@ -15,6 +15,20 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* axiom iframe 안에서는 scrollbar-gutter 가 콘텐츠 폭을 15px 잡아먹어 우측 잘림을
+   유발한다. window.parent !== window 일 때 axiom-embed 클래스가 부여되고 (CardScrollSpyEmbed),
+   그 경우 gutter 와 scrollbar 자체를 숨겨 콘텐츠가 폰 프레임 폭 390px 을 온전히 쓰게 한다. */
+html.axiom-embed {
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+}
+html.axiom-embed::-webkit-scrollbar,
+html.axiom-embed *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo',
     'Noto Sans KR', sans-serif;

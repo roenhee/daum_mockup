@@ -69,7 +69,7 @@ export function MaiIssueFeed() {
               {i > 0 ? (
                 <div className="h-2 bg-gray-100" aria-hidden />
               ) : null}
-              {renderItem(item)}
+              <div data-card-kind={item.kind}>{renderItem(item)}</div>
             </Fragment>
           ))
         )}

@@ -13,6 +13,23 @@ interface State {
   error: string | null;
 }
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const PROD_HISTORY_URL = `${BASE}/__axiom__/git-history.json`;
+
+// prod 정적 JSON 은 한 번 fetch 후 모든 path 조회에 재사용.
+let prodHistoryPromise: Promise<Record<string, GitCommit[]>> | null = null;
+function loadProdHistory(): Promise<Record<string, GitCommit[]>> {
+  if (!prodHistoryPromise) {
+    prodHistoryPromise = fetch(PROD_HISTORY_URL)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .catch((e) => {
+        prodHistoryPromise = null; // 재시도 가능하게 reset
+        throw e;
+      });
+  }
+  return prodHistoryPromise;
+}
+
 export function useGitHistory(path: string | undefined): State {
   const [state, setState] = useState<State>({ loading: true, commits: [], error: null });
 
@@ -23,15 +40,19 @@ export function useGitHistory(path: string | undefined): State {
     }
     let cancelled = false;
     setState({ loading: true, commits: [], error: null });
-    // Vite middleware는 base 무시하고 root에 등록되므로 절대 경로로 호출.
-    fetch(`/__axiom__/git-log?path=${encodeURIComponent(path)}`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data: { commits: GitCommit[] }) => {
+
+    const fetcher = import.meta.env.DEV
+      ? // dev: vite 미들웨어가 path 별로 응답 — { commits: [...] }
+        fetch(`/__axiom__/git-log?path=${encodeURIComponent(path)}`)
+          .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+          .then((d: { commits: GitCommit[] }) => d.commits ?? [])
+      : // prod: 정적 JSON 한 번 로드 후 path 키로 조회
+        loadProdHistory().then((map) => map[path] ?? []);
+
+    fetcher
+      .then((commits) => {
         if (cancelled) return;
-        setState({ loading: false, commits: data.commits ?? [], error: null });
+        setState({ loading: false, commits, error: null });
       })
       .catch((err: unknown) => {
         if (cancelled) return;

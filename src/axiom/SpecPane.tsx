@@ -6,8 +6,21 @@ import { loadDoc } from './docContent';
 import { useAxiomContext } from './AxiomContext';
 import { useGitHistory } from './useGitHistory';
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function isHtmlDoc(doc: AxiomDoc): boolean {
+  return doc.path.toLowerCase().endsWith('.html');
+}
+
+function htmlSrc(doc: AxiomDoc): string {
+  // `doc.src` 가 지정되면 그게 진짜 URL (트리 위치용 path 와 분리).
+  if (doc.src) return `${BASE}/${doc.src}`;
+  // 그 외엔 path 가 public/ 자산이라 가정하고 prefix 제거.
+  const rel = doc.path.replace(/^public\//, '');
+  return `${BASE}/${rel}`;
+}
+
 export function SpecPane({ doc }: { doc: AxiomDoc | undefined }) {
-  const content = doc ? loadDoc(doc.path) : undefined;
   const ctx = useAxiomContext();
   const articleRef = useRef<HTMLDivElement>(null);
   const activeAnchor = ctx?.activeAnchor ?? null;
@@ -37,6 +50,26 @@ export function SpecPane({ doc }: { doc: AxiomDoc | undefined }) {
       </section>
     );
   }
+
+  // HTML 문서는 iframe 으로 임베드 (컨셉 deck 등).
+  if (isHtmlDoc(doc)) {
+    return (
+      <section className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="border-b border-gray-100 px-6 py-3 shrink-0">
+          <div className="text-[11px] uppercase tracking-wide text-gray-400">Doc · HTML</div>
+          <div className="text-[14px] font-semibold text-gray-900">{doc.label}</div>
+          <div className="text-[11px] text-gray-400">{doc.path}</div>
+        </div>
+        <iframe
+          src={htmlSrc(doc)}
+          title={doc.label}
+          className="flex-1 w-full border-0 block bg-white"
+        />
+      </section>
+    );
+  }
+
+  const content = loadDoc(doc.path);
   if (!content) {
     return (
       <section className="overflow-y-auto rounded-lg border border-gray-200 bg-white p-6 text-[12px] text-gray-500">

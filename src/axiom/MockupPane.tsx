@@ -84,8 +84,11 @@ export function MockupPane({
   }, [kind, src]);
 
   return (
-    <section className="h-full overflow-hidden flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 px-3 py-4">
-      <div className="relative" style={{ width: PHONE_W, height: PHONE_H }}>
+    <section className="h-full overflow-y-auto rounded-lg border border-gray-200 bg-gray-100">
+      {/* min-h-full 로 컨테이너가 부모 이상의 높이를 보장 → 화면이 충분히 크면 폰이
+          정중앙, 화면이 좁아 폰이 다 안 들어가면 자연스럽게 세로 스크롤 발생. */}
+      <div className="min-h-full flex items-center justify-center px-3 py-4">
+        <div className="relative" style={{ width: PHONE_W, height: PHONE_H }}>
         <div
           className="relative bg-white overflow-hidden rounded-[44px] border-[8px] border-black"
           style={{ width: PHONE_W, height: PHONE_H }}
@@ -113,6 +116,7 @@ export function MockupPane({
             </div>
           </div>
         ) : null}
+        </div>
       </div>
     </section>
   );
